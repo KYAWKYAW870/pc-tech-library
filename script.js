@@ -403,16 +403,22 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const commentsRef = db.collection('comments');
 
-// Real-time listener — comment အသစ်တင်တိုင်း အားလုံးမြင်ရမယ်
+// ── My comment IDs (owner token stored in localStorage) ──────
+let myCommentIds = [];
+try {
+    myCommentIds = JSON.parse(localStorage.getItem('my_comment_ids') || '[]');
+} catch(e) { myCommentIds = []; }
+
+function saveMyCommentIds() {
+    try { localStorage.setItem('my_comment_ids', JSON.stringify(myCommentIds)); } catch(e) {}
+}
+
+// Real-time listener
 commentsRef.orderBy('timestamp', 'desc').limit(50).onSnapshot(snapshot => {
     const comments = [];
-    snapshot.forEach(doc => {
-        comments.push({ id: doc.id, ...doc.data() });
-    });
+    snapshot.forEach(doc => comments.push({ id: doc.id, ...doc.data() }));
     renderComments(comments);
-}, err => {
-    console.error('Firestore error:', err);
-});
+}, err => console.error('Firestore error:', err));
 
 async function submitFeedback() {
     const name     = document.getElementById('fb-name').value.trim() || 'Anonymous';
@@ -430,17 +436,13 @@ async function submitFeedback() {
         return;
     }
 
-    // Submit button loading state
     const btn = document.querySelector('.feedback-submit');
     btn.textContent = '⏳ တင်နေတယ်...';
     btn.disabled = true;
 
     try {
-        await commentsRef.add({
-            name,
-            topic,
-            text,
-            rating,
+        const docRef = await commentsRef.add({
+            name, topic, text, rating,
             timestamp: firebase.firestore.FieldValue.serverTimestamp(),
             timeDisplay: new Date().toLocaleString('en-GB', {
                 day: 'numeric', month: 'short',
@@ -448,11 +450,13 @@ async function submitFeedback() {
             })
         });
 
-        // Success
+        // Save this doc ID as "mine" in localStorage
+        myCommentIds.push(docRef.id);
+        saveMyCommentIds();
+
         document.getElementById('feedback-form').style.display = 'none';
         document.getElementById('feedback-success').style.display = 'block';
 
-        // Reset form
         document.getElementById('fb-name').value = '';
         document.getElementById('fb-text').value = '';
         document.getElementById('fb-topic').selectedIndex = 0;
@@ -468,9 +472,13 @@ async function submitFeedback() {
 }
 
 async function deleteComment(docId) {
+    // Only owner can delete
+    if (!myCommentIds.includes(docId)) return;
     if (!confirm('Comment ဖျက်မှာ သေချာသလား?')) return;
     try {
         await commentsRef.doc(docId).delete();
+        myCommentIds = myCommentIds.filter(id => id !== docId);
+        saveMyCommentIds();
     } catch(err) {
         alert('ဖျက်မရဘူး! 😅');
     }
@@ -484,7 +492,6 @@ function showFeedbackForm() {
 function renderComments(comments) {
     const list = document.getElementById('comments-list');
     if (!list) return;
-
     const empty = document.getElementById('comments-empty');
 
     if (!comments || comments.length === 0) {
@@ -496,29 +503,38 @@ function renderComments(comments) {
 
     const stars = n => '★'.repeat(n) + '☆'.repeat(5 - n);
 
-    list.innerHTML = comments.map(c => `
+    list.innerHTML = comments.map(c => {
+        const isOwner = myCommentIds.includes(c.id);
+        // Delete button — owner ပဲမြင်ရမယ်
+        const deleteBtn = isOwner ? `
+            <button onclick="deleteComment('${c.id}')" title="ကိုယ့် comment ဖျက်ရန်"
+                style="background:none;border:none;color:rgba(255,107,138,0.5);cursor:pointer;
+                       font-size:13px;padding:0 4px;transition:color 0.2s"
+                onmouseover="this.style.color='#ff6b8a'"
+                onmouseout="this.style.color='rgba(255,107,138,0.5)'">✕ ဖျက်</button>
+        ` : '';
+
+        return `
         <div class="comment-item">
             <div class="comment-header">
-                <span class="comment-name">👤 ${escHtml(c.name || 'Anonymous')}</span>
+                <span class="comment-name">👤 ${escHtml(c.name || 'Anonymous')}
+                    ${isOwner ? '<span style="font-size:10px;color:var(--accent-3);margin-left:5px;font-weight:400">(ကိုယ်ရေး)</span>' : ''}
+                </span>
                 <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
                     ${c.rating ? '<span class="comment-rating">' + stars(c.rating) + '</span>' : ''}
                     <span class="comment-topic">${escHtml(c.topic || '')}</span>
-                    <button onclick="deleteComment('${c.id}')" title="ဖျက်ရန်"
-                        style="background:none;border:none;color:rgba(255,107,138,0.4);cursor:pointer;font-size:13px;padding:0 4px;transition:color 0.2s"
-                        onmouseover="this.style.color='#ff6b8a'"
-                        onmouseout="this.style.color='rgba(255,107,138,0.4)'">✕</button>
+                    ${deleteBtn}
                 </div>
             </div>
             <div class="comment-text">${escHtml(c.text || '')}</div>
             <div class="comment-time">🕐 ${c.timeDisplay || ''}</div>
         </div>
-    `).join('');
+        `;
+    }).join('');
 }
 
 function escHtml(str) {
     return String(str)
-        .replace(/&/g,'&amp;')
-        .replace(/</g,'&lt;')
-        .replace(/>/g,'&gt;')
-        .replace(/"/g,'&quot;');
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
