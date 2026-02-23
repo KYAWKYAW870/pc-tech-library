@@ -618,7 +618,7 @@
                 </div>
                 <div>
                     <label class="feedback-label">✏️ Comment</label>
-                    <textarea id="fb-text" class="feedback-textarea" placeholder="Web က ဘယ်လောက်ကောင်းသလဲ၊ ဘာတွေ ထပ်ထည့်စေချင်သလဲ..." maxlength="300"></textarea>
+                    <textarea id="fb-text" class="feedback-textarea" placeholder="Web က ဘယ်လောက်ကောင်းသလဲ၊ ဘာတွေ ထပ်ထည့်ချင်သလဲ..." maxlength="300"></textarea>
                 </div>
                 <button class="feedback-submit" onclick="submitFeedback()">📨 Comment တင်မယ်</button>
             </div>
@@ -654,6 +654,10 @@
         <div class="footer-copy">Made with <span>♥</span> · Liquid Glass Design</div>
         <div class="footer-updated" id="footer-updated"></div>
     </footer>
+
+    <!-- ── Firebase SDK (CDN) ── -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 
     <script src="script.js"></script>
 </body>
