@@ -389,39 +389,91 @@ function showResult() {
 
 function restartQuiz() { initQuiz(); }
 
-// ─── Feedback / Comments ──────────────────────────────────────
-let comments = [];
+// ─── Firebase Firestore Real-time Comments ────────────────────
+const firebaseConfig = {
+    apiKey: "AIzaSyBHOguiR4dxeXMjAO_ebUJSk0ebq60gpV0",
+    authDomain: "pc-tech-library.firebaseapp.com",
+    projectId: "pc-tech-library",
+    storageBucket: "pc-tech-library.firebasestorage.app",
+    messagingSenderId: "250761166764",
+    appId: "1:250761166764:web:7ea7346be5f6bad74dc409"
+};
 
-function submitFeedback() {
-    const name    = document.getElementById('fb-name').value.trim() || 'Anonymous';
-    const topic   = document.getElementById('fb-topic').value;
-    const text    = document.getElementById('fb-text').value.trim();
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+const commentsRef = db.collection('comments');
+
+// Real-time listener — comment အသစ်တင်တိုင်း အားလုံးမြင်ရမယ်
+commentsRef.orderBy('timestamp', 'desc').limit(50).onSnapshot(snapshot => {
+    const comments = [];
+    snapshot.forEach(doc => {
+        comments.push({ id: doc.id, ...doc.data() });
+    });
+    renderComments(comments);
+}, err => {
+    console.error('Firestore error:', err);
+});
+
+async function submitFeedback() {
+    const name     = document.getElementById('fb-name').value.trim() || 'Anonymous';
+    const topic    = document.getElementById('fb-topic').value;
+    const text     = document.getElementById('fb-text').value.trim();
     const ratingEl = document.querySelector('input[name="rating"]:checked');
-    const rating  = ratingEl ? parseInt(ratingEl.value) : 0;
+    const rating   = ratingEl ? parseInt(ratingEl.value) : 0;
 
     if (!text) {
-        document.getElementById('fb-text').focus();
-        document.getElementById('fb-text').style.borderColor = '#ff6b8a';
-        setTimeout(() => document.getElementById('fb-text').style.borderColor = '', 1500);
+        const ta = document.getElementById('fb-text');
+        ta.focus();
+        ta.style.borderColor = '#ff6b8a';
+        ta.style.boxShadow = '0 0 0 3px rgba(255,107,138,0.15)';
+        setTimeout(() => { ta.style.borderColor = ''; ta.style.boxShadow = ''; }, 1800);
         return;
     }
 
-    const comment = {
-        name, topic, text, rating,
-        time: new Date().toLocaleString('en-GB', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' })
-    };
-    comments.unshift(comment);
-    renderComments();
+    // Submit button loading state
+    const btn = document.querySelector('.feedback-submit');
+    btn.textContent = '⏳ တင်နေတယ်...';
+    btn.disabled = true;
 
-    // show success
-    document.getElementById('feedback-form').style.display = 'none';
-    document.getElementById('feedback-success').style.display = 'block';
+    try {
+        await commentsRef.add({
+            name,
+            topic,
+            text,
+            rating,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+            timeDisplay: new Date().toLocaleString('en-GB', {
+                day: 'numeric', month: 'short',
+                hour: '2-digit', minute: '2-digit'
+            })
+        });
 
-    // reset form
-    document.getElementById('fb-name').value = '';
-    document.getElementById('fb-text').value = '';
-    document.getElementById('fb-topic').selectedIndex = 0;
-    if (ratingEl) ratingEl.checked = false;
+        // Success
+        document.getElementById('feedback-form').style.display = 'none';
+        document.getElementById('feedback-success').style.display = 'block';
+
+        // Reset form
+        document.getElementById('fb-name').value = '';
+        document.getElementById('fb-text').value = '';
+        document.getElementById('fb-topic').selectedIndex = 0;
+        if (ratingEl) ratingEl.checked = false;
+
+    } catch (err) {
+        console.error('Submit error:', err);
+        alert('တင်မရဘူး — internet connection စစ်ဆေးပါ! 😅');
+    }
+
+    btn.textContent = '📨 Comment တင်မယ်';
+    btn.disabled = false;
+}
+
+async function deleteComment(docId) {
+    if (!confirm('Comment ဖျက်မှာ သေချာသလား?')) return;
+    try {
+        await commentsRef.doc(docId).delete();
+    } catch(err) {
+        alert('ဖျက်မရဘူး! 😅');
+    }
 }
 
 function showFeedbackForm() {
@@ -429,28 +481,44 @@ function showFeedbackForm() {
     document.getElementById('feedback-success').style.display = 'none';
 }
 
-function renderComments() {
+function renderComments(comments) {
     const list = document.getElementById('comments-list');
+    if (!list) return;
+
     const empty = document.getElementById('comments-empty');
-    if (comments.length === 0) {
-        empty.style.display = 'block';
+
+    if (!comments || comments.length === 0) {
         list.innerHTML = '';
-        list.appendChild(empty);
+        if (empty) { empty.style.display = 'block'; list.appendChild(empty); }
         return;
     }
-    empty.style.display = 'none';
+    if (empty) empty.style.display = 'none';
+
     const stars = n => '★'.repeat(n) + '☆'.repeat(5 - n);
+
     list.innerHTML = comments.map(c => `
         <div class="comment-item">
             <div class="comment-header">
-                <span class="comment-name">👤 ${c.name}</span>
-                <div style="display:flex;gap:8px;align-items:center">
+                <span class="comment-name">👤 ${escHtml(c.name || 'Anonymous')}</span>
+                <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
                     ${c.rating ? '<span class="comment-rating">' + stars(c.rating) + '</span>' : ''}
-                    <span class="comment-topic">${c.topic}</span>
+                    <span class="comment-topic">${escHtml(c.topic || '')}</span>
+                    <button onclick="deleteComment('${c.id}')" title="ဖျက်ရန်"
+                        style="background:none;border:none;color:rgba(255,107,138,0.4);cursor:pointer;font-size:13px;padding:0 4px;transition:color 0.2s"
+                        onmouseover="this.style.color='#ff6b8a'"
+                        onmouseout="this.style.color='rgba(255,107,138,0.4)'">✕</button>
                 </div>
             </div>
-            <div class="comment-text">${c.text}</div>
-            <div class="comment-time">🕐 ${c.time}</div>
+            <div class="comment-text">${escHtml(c.text || '')}</div>
+            <div class="comment-time">🕐 ${c.timeDisplay || ''}</div>
         </div>
     `).join('');
+}
+
+function escHtml(str) {
+    return String(str)
+        .replace(/&/g,'&amp;')
+        .replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;')
+        .replace(/"/g,'&quot;');
 }
