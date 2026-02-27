@@ -18,24 +18,21 @@ window.addEventListener('load', () => {
     }, 2000);
 });
 
-// ─── Theme Toggle (smooth + ripple) ──────────────────────────
+// ─── Theme Toggle (with localStorage memory) ────────────────────────
 function toggleTheme() {
-    // ripple overlay for smooth flash
-    const ripple = document.createElement('div');
-    ripple.style.cssText = `
-        position:fixed; inset:0; z-index:9998; pointer-events:none;
-        background: ${document.body.classList.contains('light-mode') ? 'rgba(10,15,30,0.18)' : 'rgba(255,255,255,0.18)'};
-        opacity:1; transition: opacity 0.5s ease;
-    `;
-    document.body.appendChild(ripple);
-    setTimeout(() => { ripple.style.opacity = '0'; }, 50);
-    setTimeout(() => ripple.remove(), 600);
-
     const isLight = document.body.classList.toggle('light-mode');
-    document.getElementById('theme-text').innerText = isLight ? 'Light Mode' : 'Dark Mode';
+    const btn = document.getElementById('theme-btn');
+    if (isLight) {
+        btn.textContent = '☀️ Light';
+        btn.classList.add('theme-active-light');
+    } else {
+        btn.textContent = '🌙 Dark';
+        btn.classList.remove('theme-active-light');
+    }
+    try { localStorage.setItem('pctl_theme', isLight ? 'light' : 'dark'); } catch(e) {}
 }
 
-// ─── Zawgyi / Unicode Toggle ──────────────────────────────────
+// ─── Zawgyi / Unicode Toggle (with memory) ──────────────────────────
 let isZawgyi = false;
 function toggleFont() {
     isZawgyi = !isZawgyi;
@@ -43,12 +40,48 @@ function toggleFont() {
     const btn = document.getElementById('font-toggle-btn');
     btn.textContent = isZawgyi ? '🌐 Zawgyi' : '🌐 Unicode';
     btn.classList.toggle('zawgyi-active', isZawgyi);
+    try { localStorage.setItem('pctl_font', isZawgyi ? 'zawgyi' : 'unicode'); } catch(e) {}
 }
+
+// ─── Apply saved preferences on load ────────────────────────────────
+(function applyPrefs() {
+    try {
+        if (localStorage.getItem('pctl_theme') === 'light') {
+            document.body.classList.add('light-mode');
+        }
+        if (localStorage.getItem('pctl_font') === 'zawgyi') {
+            isZawgyi = true;
+            document.body.classList.add('zawgyi-mode');
+        }
+    } catch(e) {}
+    // Update button states after DOM ready
+    document.addEventListener('DOMContentLoaded', () => {
+        if (document.body.classList.contains('light-mode')) {
+            const btn = document.getElementById('theme-btn');
+            if (btn) { btn.textContent = '☀️ Light'; btn.classList.add('theme-active-light'); }
+        }
+        if (isZawgyi) {
+            const btn = document.getElementById('font-toggle-btn');
+            if (btn) { btn.textContent = '🌐 Zawgyi'; btn.classList.add('zawgyi-active'); }
+        }
+    });
+})();
+
+// ─── Scroll Progress Bar ─────────────────────────────────────────────
+window.addEventListener('scroll', () => {
+    const prog = document.getElementById('scroll-progress');
+    if (prog) {
+        const scrolled = window.scrollY;
+        const total = document.documentElement.scrollHeight - window.innerHeight;
+        prog.style.width = (total > 0 ? (scrolled / total) * 100 : 0) + '%';
+    }
+}, { passive: true });
 
 // ─── Back-to-top ──────────────────────────────────────────────
 const backBtn = document.getElementById('back-to-top');
 window.addEventListener('scroll', () => {
     backBtn.classList.toggle('visible', window.scrollY > 300);
+
 });
 function scrollToTop() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -295,6 +328,67 @@ const allQuizData = [
     { q: "PC Build မှာ 80 Plus Bronze PSU ထက် 80 Plus Gold PSU ကိုဘာကြောင့် ပိုရွေးသင့်သလဲ?",
       opts: ["ပိုကြီးလို့","Efficiency 87-90% ဖြစ်ပြီး လျှပ်စစ်ဆုံးရှုံးမှု နည်းကာ ဝပ်ဘိုးချွေတာနိုင်လို့","Cable ပိုများလို့","Color ပိုကောင်းလို့"],
       ans: 1, exp: "Gold PSU ဟာ Bronze ထက် efficiency မြင့်ပြီး (87-90% vs 82-85%) ၊ long-term မှာ electric bill ချွေတာနိုင်ပြီး hardware ကိုပါ ပိုကာကွယ်ပေးတယ်! ⚡" },
+    // ── Questions 21-40 ──
+    { q: "RAM Dual Channel ဆိုတာဘာကိုဆိုလဲ?",
+      opts: ["RAM 2 ချပ်ပဲ တပ်ရမယ်","RAM 2 ချပ်ကို motherboard ကနေ parallel ပြေးပြီး bandwidth 2x မြင့်တာ","RAM speed 2x တိုးတာ","RAM size 2x ဖြစ်တာ"],
+      ans: 1, exp: "Dual Channel မှာ RAM 2 ချပ်ကို controller က တပြိုင်နက် access လုပ်တဲ့အတွက် effective bandwidth 2x မြင့်ပြီး performance ကောင်းတယ်! 🚀" },
+    { q: "Motherboard ရဲ့ VRM ဆိုတာဘာလဲ?",
+      opts: ["Video output chip","CPU ကို stable power ပေးတဲ့ Voltage Regulator Module","RAM slot controller","Fan connector"],
+      ans: 1, exp: "VRM (Voltage Regulator Module) ဟာ PSU ကနေ raw power ကို CPU လိုအပ်တဲ့ precise voltage အဖြစ် ပြောင်းပေးပြီး overclocking မှာ အရေးကြီးတယ်! ⚡" },
+    { q: "TDP (Thermal Design Power) ဆိုတာဘာလဲ?",
+      opts: ["CPU ရဲ့ maximum clock speed","Chip က generate လုပ်တဲ့ heat ကို watt နဲ့ measure လုပ်ထားတဲ့ cooling requirement","RAM bandwidth","GPU memory speed"],
+      ans: 1, exp: "TDP ဆိုသည်မှာ CPU/GPU က maximum load မှာ ထုတ်တဲ့ heat ပမာဏဖြစ်ပြီး cooler ရွေးချယ်ဖို့ reference အဖြစ် သုံးတယ်! 🌡️" },
+    { q: "SSD ရဲ့ TBW (Terabytes Written) ဆိုတာဘာကိုဆိုလဲ?",
+      opts: ["SSD ရဲ့ maximum read speed","SSD ရဲ့ endurance rating — lifetime ကြာအောင် ရေးနိုင်တဲ့ data ပမာဏ","SSD ရဲ့ physical size","SSD connection type"],
+      ans: 1, exp: "TBW ဟာ SSD manufacturer က guarantee ပေးတဲ့ total data write capacity ဖြစ်ပြီး TBW မြင့်လေ SSD umur ရှည်လေ! 💾" },
+    { q: "PC မှာ POST (Power-On Self-Test) ဆိုတာဘာလဲ?",
+      opts: ["Windows startup process","PC ဖွင့်ရင် hardware တွေ ကောင်းမကောင်း BIOS က စစ်ဆေးတဲ့ process","Antivirus scan","Driver installation"],
+      ans: 1, exp: "POST ဆိုတာ PC ဖွင့်လိုက်ရင် BIOS က CPU, RAM, GPU, storage တွေကို automatically စစ်ဆေးတဲ့ initial hardware check ဖြစ်တယ်! ✅" },
+    { q: "Overclocking ဆိုတာဘာကိုဆိုလဲ?",
+      opts: ["CPU ကို stock speed မှာ run တာ","CPU/GPU ကို manufacturer default ထက် clock speed မြင့်မြင့် run တာ","PC ကို sleep mode ထားတာ","RAM ကို remove လုပ်တာ"],
+      ans: 1, exp: "Overclocking ဆိုသည်မှာ CPU/GPU/RAM ကို default speed ထက် မြင့်အောင် run ပြီး performance တိုးမြှင့်တဲ့ technique ဖြစ်ပါတယ်! ⚠️" },
+    { q: "M.2 Form Factor ဆိုတာဘာကိုဆိုလဲ?",
+      opts: ["RAM ပုံစံ","SSD/WiFi card တပ်ဖို့ motherboard ပေါ်က small slot format","GPU connector type","PSU cable type"],
+      ans: 1, exp: "M.2 ဟာ motherboard ပေါ်မှာ တိုက်ရိုက်တပ်တဲ့ compact form factor ဖြစ်ပြီး NVMe SSD, WiFi cards တွေ support လုပ်တယ်! 🔌" },
+    { q: "PCIe 4.0 vs PCIe 3.0 ဘာကွာသလဲ?",
+      opts: ["Color ကွာတယ်","PCIe 4.0 ဟာ per-lane bandwidth 2x ပိုမြင့်တယ် (16GT/s vs 8GT/s)","PCIe 4.0 ဟာ backward compatible မဖြစ်ဘူး","PCIe 4.0 ကို AMD ပဲ support တယ်"],
+      ans: 1, exp: "PCIe 4.0 ဟာ 3.0 ထက် per-lane bandwidth 2x ပိုမြင့်ပြီး NVMe SSD speed တွေကို 7GB/s ကျော်အထိ ရောက်နိုင်စေတယ်! 🚀" },
+    { q: "Anti-static precaution ဘာကြောင့် လိုအပ်သလဲ?",
+      opts: ["PC ကို ပိုမြန်အောင်","Static electricity ကြောင့် sensitive components ပျက်စီးနိုင်လို့","Warranty ကာကွယ်ဖို့","Overheating ကာကွယ်ဖို့"],
+      ans: 1, exp: "Static electricity (ESD) ဟာ RAM, GPU, CPU တွေကို permanently damage လုပ်နိုင်တဲ့အတွက် anti-static wrist strap သုံးဖို့ recommend လုပ်တယ်! ⚠️" },
+    { q: "Windows မှာ BSOD ဖြစ်ရတဲ့ အကြောင်းရင်းကဘာလဲ?",
+      opts: ["Monitor ပြဿနာ","Driver corruption, RAM failure, hardware incompatibility, kernel error","Internet connection ပြတ်တာ","Screen brightness settings"],
+      ans: 1, exp: "BSOD ဟာ driver crash, RAM error, storage failure, incompatible hardware တွေကြောင့် Windows kernel fail သွားတာ ဖြစ်ပါတယ်! ⚠️" },
+    { q: "GPU ရဲ့ CUDA Cores (Nvidia) ဆိုတာဘာကိုဆိုလဲ?",
+      opts: ["GPU ရဲ့ RAM cells","Parallel processing units — rendering, AI computation လုပ်တဲ့ processors","Display connectors","Power connectors"],
+      ans: 1, exp: "CUDA Cores ဟာ Nvidia GPU မှာ ရှိတဲ့ parallel compute units ဖြစ်ပြီး ရေများလေ rendering speed နဲ့ AI/ML performance ကောင်းလေ! 🎮" },
+    { q: "PC Case ရဲ့ Airflow Design ဘာကြောင့် အရေးကြီးသလဲ?",
+      opts: ["Aesthetic ကောင်းဖို့","Hot air ကို case ထဲကနေ ထုတ်ပြီး components temperature ကျဖို့","GPU ကို ပိုမြန်ဖို့","PSU efficiency တိုးဖို့"],
+      ans: 1, exp: "Good airflow ဟာ CPU/GPU temperatures ကျပြီး thermal throttling မဖြစ်အောင် ကာကွယ်ကာ system longevity တိုးမြှင့်ပေးတယ်! 🌬️" },
+    { q: "Integrated Graphics (iGPU) ဆိုတာဘာလဲ?",
+      opts: ["External dedicated GPU","CPU ထဲပါ built-in graphics processor — light gaming/display output ရဖို့","Motherboard GPU slot","PCIe GPU"],
+      ans: 1, exp: "iGPU ဟာ CPU chip ထဲ built-in graphics ဖြစ်ပြီး dedicated GPU မပါဘဲ display output နဲ့ light gaming support ပေးပါတယ်! 🖥️" },
+    { q: "Windows 'msconfig' command ဘာလုပ်ဆောင်သလဲ?",
+      opts: ["Format C: drive","System Configuration — startup programs, boot settings, services manage လုပ်ဖို့","Uninstall Windows","Check disk health"],
+      ans: 1, exp: "msconfig ဟာ System Configuration utility ဖြစ်ပြီး startup items, services, boot options manage လုပ်ဖို့ Win+R → msconfig နဲ့ access ရတယ်! ⚙️" },
+    { q: "RAID ဆိုတာဘာလဲ?",
+      opts: ["Rapid Artificial Intelligence Drive","Multiple drives ကို combine လုပ်ပြီး performance/redundancy တိုးမြှင့်တဲ့ storage technology","SSD format type","USB connection standard"],
+      ans: 1, exp: "RAID (Redundant Array of Independent Disks) ဟာ drives တွေ combine လုပ်ပြီး RAID 0=speed, RAID 1=backup, RAID 5=both ဆောင်ပေးပါတယ်! 🗄️" },
+    { q: "HDD ရဲ့ RPM (e.g. 7200RPM) ဆိုတာဘာကိုဆိုလဲ?",
+      opts: ["CPU speed unit","Disk platter တစ်မိနစ်မှာ ပတ်နိုင်တဲ့ အကြိမ်ရေ — မြင့်လေ ပိုမြန်လေ","RAM speed","PSU output"],
+      ans: 1, exp: "RPM ဟာ HDD ရဲ့ platter spin speed ဖြစ်ပြီး 7200RPM ဟာ 5400RPM ထက် data access ပိုမြန်ပြီး gaming/OS drive အတွက် ပိုသင့်တော်တယ်! 💿" },
+    { q: "CPU Cooler ၂ မျိုး အဓိကကဘာနဲ့ဘာလဲ?",
+      opts: ["RGB နဲ့ Non-RGB","Air Cooler (Heatsink+Fan) နဲ့ Liquid Cooler (AIO)","Big နဲ့ Small","Intel compatible နဲ့ AMD compatible"],
+      ans: 1, exp: "CPU Cooler ၂ မျိုး — Air Cooler ဟာ reliable, ဈေးသက်သာ; AIO Liquid Cooler ဟာ ပိုအေးပြီး case ထဲ airflow ကောင်းတယ်! 🌬️" },
+    { q: "GPU Driver ဘာကြောင့် update လုပ်ဖို့ အရေးကြီးသလဲ?",
+      opts: ["Driver update က GPU ကို physically ပြောင်းပေးတယ်","Performance optimization, bug fixes, new game support ရဖို့","Warranty extend ဖြစ်ဖို့","Power consumption လျော့ဖို့"],
+      ans: 1, exp: "GPU drivers update လုပ်ရင် new games optimization, bug fixes နဲ့ feature additions ရပြီး gaming performance တက်နိုင်တယ်! 🎮" },
+    { q: "GPU Benchmark ဆိုတာဘာလဲ?",
+      opts: ["GPU physical size","GPU ရဲ့ performance ကို test ပြီး score/comparison ထုတ်တဲ့ standardized test","GPU warranty period","GPU driver version"],
+      ans: 1, exp: "GPU Benchmark (eg: 3DMark) ဟာ standardized workload ပေးပြီး score ထုတ်ကာ GPUs comparison လုပ်ဖို့ + performance စစ်ဖို့ သုံးတယ်! 📊" },
+    { q: "HDMI နဲ့ DisplayPort ဘာကွာသလဲ?",
+      opts: ["HDMI က Audio support မရဘူး","DisplayPort က higher refresh rates, daisy-chaining support, PC-native protocol","နှစ်ခုတစ်ထပ်တည်း","HDMI က resolution ပိုမြင့်တယ်"],
+      ans: 1, exp: "DisplayPort ဟာ PC-native ဖြစ်ပြီး high refresh rate, multi-monitor daisy-chain support ရှိတယ်။ HDMI ဟာ TV/console အတွက် ပိုသင့်တော်တယ်! 🖥️" },
 ];
 
 let quizPool = [];
@@ -402,6 +496,11 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const commentsRef = db.collection('comments');
+
+// Analytics
+try {
+    if (firebase.analytics) firebase.analytics();
+} catch(e) {}
 
 // ── My comment IDs (owner token stored in localStorage) ──────
 let myCommentIds = [];
@@ -527,7 +626,7 @@ function renderComments(comments) {
                 </div>
             </div>
             <div class="comment-text">${escHtml(c.text || '')}</div>
-            <div class="comment-time">🕐 ${c.timeDisplay || ''}</div>
+            <div class="comment-time">🕐 ${relativeTime(c.timestamp) || c.timeDisplay || ''}</div>
         </div>
         `;
     }).join('');
@@ -537,4 +636,17 @@ function escHtml(str) {
     return String(str)
         .replace(/&/g,'&amp;').replace(/</g,'&lt;')
         .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ─── Relative Time ("2 hours ago") ───────────────────────────
+function relativeTime(ts) {
+    if (!ts) return '';
+    const now = Date.now();
+    const then = ts.toDate ? ts.toDate().getTime() : new Date(ts).getTime();
+    const diff = Math.floor((now - then) / 1000);
+    if (diff < 60)  return 'Just now';
+    if (diff < 3600)  return Math.floor(diff / 60) + ' min ago';
+    if (diff < 86400) return Math.floor(diff / 3600) + ' hr ago';
+    if (diff < 604800) return Math.floor(diff / 86400) + ' days ago';
+    return new Date(then).toLocaleDateString('en-GB', { day:'numeric', month:'short' });
 }

@@ -1,602 +1,534 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="my">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mg Kyaw PC Knowledge Base</title>
+    <title>PC Tech Library — Premium Hardware Knowledge Base</title>
+    <meta name="description" content="Myanmar PC Hardware Knowledge Base — Interactive guides, build calculators, quiz & more by Mg Kyaw · Kyaw Khant Thu">
+    <meta name="theme-color" content="#060609">
+    <!-- Open Graph -->
+    <meta property="og:title" content="⚡ PC Tech Library">
+    <meta property="og:description" content="Master PC Hardware Like a Pro — Myanmar's premium PC knowledge base">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://kyawkyaw870.github.io/pc-tech-library/">
+    <meta property="og:image" content="https://kyawkyaw870.github.io/pc-tech-library/og-preview.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="⚡ PC Tech Library">
+    <meta name="twitter:description" content="Master PC Hardware Like a Pro">
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%2300d4ff'/><stop offset='100%25' stop-color='%23a855f7'/></linearGradient></defs><rect width='100' height='100' rx='20' fill='url(%23g)'/><text y='.9em' font-size='70' x='15'>⚡</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Outfit:wght@400;500;600;700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- Scroll Progress Bar -->
+    <div id="scroll-progress"></div>
 
-    <!-- ── Loading Screen ── -->
+    <!-- Ambient Background -->
+    <div class="ambient-bg">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+    <div class="grid-pattern"></div>
+
+    <!-- Loading Screen -->
     <div id="loading-screen">
-        <div class="loader-logo">⚡ PC Tech Library</div>
-        <div class="loader-sub">Knowledge Base by Mg Kyaw</div>
-        <div class="loader-bar-wrap">
-            <div class="loader-bar"></div>
-        </div>
-        <div class="loader-dots">
-            <span></span><span></span><span></span>
-        </div>
+        <div class="loader-icon">⚡</div>
+        <div class="loader-label">Loading PC Tech Library</div>
+        <div class="loader-bar-wrap"><div class="loader-bar"></div></div>
     </div>
 
+    <!-- Navbar -->
     <nav class="navbar">
-        <div class="nav-brand">
-            <h1>PC Tech Library</h1>
-            <p>Knowledge Base by Mg Kyaw</p>
-        </div>
-
-        <div class="header-actions" style="display: flex; align-items: center; gap: 16px;">
-            <div class="font-toggle-wrap">
-                <button class="font-toggle-btn" id="font-toggle-btn" onclick="toggleFont()" title="Zawgyi / Unicode ပြောင်းရန်">🌐 Unicode</button>
-            </div>
-            <div class="theme-switch-wrapper" style="display: flex; align-items: center; gap: 10px;">
-                <label class="theme-switch">
-                    <input type="checkbox" id="checkbox" onclick="toggleTheme()" />
-                    <div class="slider round"></div>
-                </label>
-                <span id="theme-text" style="font-size: 13px; font-weight: 500; min-width: 75px;">Dark Mode</span>
-            </div>
-            <div class="search-box">
-                <input type="text" id="searchBar" placeholder="Search (e.g. windows, ram)..." onkeyup="searchTech()">
+        <div class="nav-inner">
+            <a href="#" class="nav-brand">
+                <div class="brand-icon">⚡</div>
+                <div>
+                    <div class="brand-name">PC Tech Library</div>
+                    <div class="brand-sub">by Mg Kyaw</div>
+                </div>
+            </a>
+            <div class="nav-controls">
+                <div class="search-wrap">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                    <input type="text" id="searchBar" placeholder="Search hardware, OS, tips..." onkeyup="searchTech()">
+                </div>
+                <div class="toggle-group">
+                    <button class="toggle-btn active" id="font-toggle-btn" onclick="toggleFont()">🌐 Unicode</button>
+                    <button class="toggle-btn" id="theme-btn" onclick="toggleTheme()">🌙 Dark</button>
+                </div>
             </div>
         </div>
     </nav>
 
-    <!-- ── Section Tabs ── -->
-    <div class="section-tabs">
-        <button class="tab-btn active" onclick="filterSection('all')">📚 အားလုံး</button>
-        <button class="tab-btn" onclick="filterSection('hardware')">🖥️ Hardware</button>
-        <button class="tab-btn" onclick="filterSection('os')">💿 OS & Software</button>
-        <button class="tab-btn" onclick="filterSection('troubleshoot')">🛠️ Troubleshooting</button>
-        <button class="tab-btn" onclick="filterSection('build')">🔧 PC Builds</button>
-        <button class="tab-btn" onclick="filterSection('tools')">✨ Tools</button>
-    </div>
+    <!-- Main -->
+    <main class="main-wrap">
 
-    <div class="container">
-
-        <!-- ── Hardware Card ── -->
-        <section class="tech-card" data-section="hardware" data-title="hardware intel amd ryzen core i3 i5 i7 i9 cpu gpu nvidia geforce radeon encoding nvenc psu ram ssd hdd">
-            <div class="card-header">🖥️ Hardware အကြောင်း</div>
-            <div class="list-container">
-
-                <details class="nested-details">
-                    <summary>Intel vs AMD CPU - ဘယ်ဟာက ပိုကောင်းသလဲ?</summary>
-                    <div class="content">
-                        <p>CPU ဝယ်ယူတဲ့အခါ ကိုယ်အသုံးပြုမယ့် လုပ်ငန်းစဉ်အပေါ် မူတည်ပြီး ရွေးချယ်သင့်ပါတယ်-</p>
-                        <table class="tech-table">
-                            <thead>
-                                <tr><th>Brand</th><th>Product Series</th><th>အားသာချက်</th></tr>
-                            </thead>
-                            <tbody>
-                                <tr><td><b>Intel Core</b></td><td>i3, i5, i7, i9</td><td>Single-core performance ကောင်းပြီး Stability မြင့်မားသည်👌။</td></tr>
-                                <tr><td><b>AMD Ryzen</b></td><td>R3, R5, R7, R9</td><td>Multi-core performance ကောင်းပြီး ဈေးနှုန်းနှင့် တန်ဖိုးမျှတသည်😎။</td></tr>
-                            </tbody>
-                        </table>
-                        <p style="margin-top: 15px;"><b>စနစ်တကျ ရွေးချယ်နည်း-</b></p>
-                        <ul>
-                            <li><b>AMD 'G' Series:</b> Built-in GPU ပါဝင်သောကြောင့် Graphics Card မပါဘဲ ဂိမ်းဆော့လိုသူများအတွက် အထူးသင့်လျော်သည်။</li>
-                            <li><b>Intel 'F' Series:</b> Graphics Card သီးသန့်သုံးမည့်သူများအတွက် ဈေးသက်သာသော ရွေးချယ်မှုဖြစ်သည်။</li>
-                            <li><b>Socket သတိပြုရန်:</b> Intel အတွက် LGA socket နှင့် AMD အတွက် AM4/AM5 socket မတူညီသောကြောင့် Motherboard ဝယ်လျှင် သေချာစစ်ဆေးပါ။</li>
-                        </ul>
-                    </div>
-                </details>
-
-                <details class="nested-details">
-                    <summary>CPU - Core နှင့် Thread ဆိုတာဘာလဲ?</summary>
-                    <div class="content">
-                        <p>CPU ကို ကွန်ပျူတာရဲ့ ဦးနှောက်လို့ တင်စားနိုင်ပြီး Core နဲ့ Thread တွေက ဦးနှောက်ရဲ့ လုပ်ဆောင်နိုင်စွမ်းကို ဆုံးဖြတ်ပါတယ်🧠</p>
-                        <table class="tech-table">
-                            <thead>
-                                <tr><th>အမျိုးအစား</th><th>Cores/Threads</th><th>အသုံးပြုရန် အသင့်တော်ဆုံး</th></tr>
-                            </thead>
-                            <tbody>
-                                <tr><td><b>Entry Level</b></td><td>2 Cores / 4 Threads</td><td>ရုံးသုံး၊ ကျောင်းသုံး၊ အင်တာနက်ကြည့်ရန်🫡။</td></tr>
-                                <tr><td><b>Mid-Range</b></td><td>6 Cores / 12 Threads</td><td>Gaming နှင့် Video Editing အသင့်အတင့်လုပ်ရန်😎။</td></tr>
-                                <tr><td><b>High-End</b></td><td>8+ Cores / 16+ Threads</td><td>Professional Rendering နှင့် Heavy Multitasking။😈</td></tr>
-                            </tbody>
-                        </table>
-                        <p style="margin-top: 10px;"><b>မှတ်ချက်:</b> Core က ရုပ်ပိုင်းဆိုင်ရာ အစိတ်အပိုင်းဖြစ်ပြီး Thread ကတော့ Core ကို အလုပ်လုပ်ဖို့ ခိုင်းစေတဲ့ virtual ညွှန်ကြားချက်တွေ ဖြစ်ပါတယ်။</p>
-                    </div>
-                </details>
-
-                <details class="nested-details">
-                    <summary>Storage - HDD နှင့် SSD ဘာကွာသလဲ?</summary>
-                    <div class="content">
-                        <p>ကွန်ပျူတာရဲ့မှတ်ဉာဏ်ဖြစ်တဲ့ Storage အမျိုးအစားတွေကို နှိုင်းယှဉ်ပြထားပါတယ်-</p>
-                        <table class="tech-table">
-                            <thead>
-                                <tr><th>အမျိုးအစား</th><th>Speed</th><th>အားသာချက်</th></tr>
-                            </thead>
-                            <tbody>
-                                <tr><td><b>HDD</b></td><td>အနှေးဆုံး🐢</td><td>ဈေးသက်သာပြီး ဖိုင်အများကြီးသိမ်းနိုင်ခြင်း🫡။</td></tr>
-                                <tr><td><b>SATA SSD</b></td><td>မြန်ဆန်သည်😎</td><td>HDD ထက် ၁၀ ဆကျော် ပိုမြန်ပြီး တည်ငြိမ်ခြင်း😈။</td></tr>
-                                <tr><td><b>NVMe SSD</b></td><td>အမြန်ဆုံး💀</td><td>Video Editing နှင့် High-end Gaming အတွက် အကောင်းဆုံး😎👌။</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </details>
-
-                <details class="nested-details">
-                    <summary>RAM အကြောင်း</summary>
-                    <div class="content">
-                        <p>RAM (Memory) နည်းပညာက အချိန်နဲ့အမျှ ပိုမြန်လာပြီး ပါဝါစား သက်သာလာပါတယ်ခင်ဗျ</p>
-                        <table class="tech-table">
-                            <thead>
-                                <tr><th>အမျိုးအစား</th><th>Description</th><th>Status</th></tr>
-                            </thead>
-                            <tbody>
-                                <tr><td><b>DDR1</b></td><td>အစောဆုံး နည်းပညာဖြစ်ပြီး ယခုခေတ်မှာ မသုံးတော့ပါ😭။</td><td>Legacy ❌</td></tr>
-                                <tr><td><b>DDR2</b></td><td>Speed ပိုမြန်လာသော်လည်း ယနေ့ခေတ်ဂိမ်းများအတွက်က💀။</td><td>Legacy ❌</td></tr>
-                                <tr><td><b>DDR3</b></td><td>PC အဟောင်းအချို့မှာ မြင်တွေ့နိုင်ဆဲဖြစ်ပြီး Speed နှေးပါသည်‌‌/ပေါ့ပေါ့ပါးပါးဂိမ်းတွေတော့ဆော့လို့ရ😎။</td><td>Old ⚠️</td></tr>
-                                <tr><td><b>DDR4</b></td><td>လက်ရှိမှာ လူသုံးအများဆုံးဖြစ်ပြီး Speed နှင့် ဈေးနှုန်း မျှတပါသည်😎👌။</td><td>Standard ✅</td></tr>
-                                <tr><td><b>DDR5</b></td><td>အသစ်ဆုံးနှင့် အမြန်ဆုံးဖြစ်ကာ High-end PC များအတွက် ဖြစ်သည်😈။</td><td>Premium 🔥</td></tr>
-                            </tbody>
-                        </table>
-                        <p style="margin-top: 10px;"><b>မှတ်ချက်:</b> DDR အမျိုးအစား တစ်ခုနဲ့တစ်ခုဟာ Slot ပုံစံမတူတဲ့အတွက် Motherboard က ထောက်ပံ့တဲ့ အမျိုးအစားကိုပဲ ဝယ်သင့်ပါတယ်🫡။</p>
-                    </div>
-                </details>
-
-                <details class="nested-details">
-                    <summary>PSU (Power Supply) - ဝယ်ယူလျှင် ဘာတွေကြည့်ရမလဲ?</summary>
-                    <div class="content">
-                        <p>PSU က ကွန်ပျူတာအစိတ်အပိုင်း အားလုံးကို လျှပ်စစ်ဓာတ်အား ဖြန့်ဝေပေးတာဖြစ်လို့ အရည်အသွေးကောင်းဖို့ အလွန်အရေးကြီးပါတယ်-</p>
-                        <p><b>၁။ 80 Plus Efficiency Rating (စွမ်းဆောင်ရည် အဆင့်ဆင့်)</b></p>
-                        <table class="tech-table">
-                            <thead>
-                                <tr><th>Rating</th><th>Efficiency</th><th>မှတ်ချက်</th></tr>
-                            </thead>
-                            <tbody>
-                                <tr><td><b>80+ White</b></td><td>80%</td><td>အခြေခံအဆင့် (Entry Level)</td></tr>
-                                <tr><td><b>80+ Bronze</b></td><td>82% - 85%</td><td>လူသုံးအများဆုံးနှင့် စိတ်ချရသည်</td></tr>
-                                <tr><td><b>80+ Gold</b></td><td>87% - 90%</td><td>High-end PC များအတွက် အကောင်းဆုံး</td></tr>
-                            </tbody>
-                        </table>
-                        <p style="margin-top: 20px;"><b>၂။ လိုအပ်သော Wattage (ဝပ်) ပမာဏ</b></p>
-                        <table class="tech-table">
-                            <thead>
-                                <tr><th>PC Type</th><th>Specs (CPU + GPU)</th><th>Recommended Wattage</th></tr>
-                            </thead>
-                            <tbody>
-                                <tr><td><b>Entry PC</b></td><td>i3 / R3 + Integrated GPU</td><td>450W - 550W</td></tr>
-                                <tr><td><b>Gaming PC</b></td><td>i5 / R5 + Mid-range GPU</td><td>550W - 650W</td></tr>
-                                <tr><td><b>Workstation</b></td><td>i7 / R7 + High-end GPU</td><td>750W နှင့်အထက်</td></tr>
-                            </tbody>
-                        </table>
-                        <p style="margin-top: 15px;"><b>အရေးကြီးသော သတိပေးချက်:</b> နာမည်မရှိသော တန်ဖိုးနည်း PSU (Generic PSU) များသည် လျှပ်စစ်အား မတည်ငြိမ်ပါက ကွန်ပျူတာအစိတ်အပိုင်းများကို လောင်ကျွမ်းစေနိုင်သဖြင့် နာမည်ကြီး Brand (ဥပမာ - Corsair, Cooler Master, Seasonic) များကိုသာ ရွေးချယ်သင့်ပါသည်။</p>
-                    </div>
-                </details>
-
-                <details class="nested-details">
-                    <summary>GPU (Graphics Card) - ဂိမ်းဆော့ဖို့နဲ့ ဗီဒီယိုတည်းဖြတ်ဖို့ ဘယ်လိုရွေးမလဲ?</summary>
-                    <div class="content">
-                        <p>GPU က ရုပ်ပုံတွေကို ပြသပေးရုံတင်မကဘဲ Video Editing နဲ့ Rendering ပိုင်းမှာလည်း အဓိက ကူညီပေးပါတယ်-</p>
-                        <p><b>၁။ GPU အမျိုးအစား နှစ်မျိုး</b></p>
-                        <table class="tech-table">
-                            <thead>
-                                <tr><th>အမျိုးအစား</th><th>အမည်</th><th>အသုံးပြုရန် အသင့်တော်ဆုံး</th></tr>
-                            </thead>
-                            <tbody>
-                                <tr><td><b>Integrated (cpu မှာပါသည့် graphics)</b></td><td>Intel UHD, Radeon Graphics</td><td>ရုံးသုံး၊ ကျောင်းသုံးနှင့် ပေါ့ပေါ့ပါးပါး ဂိမ်းများအတွက်။</td></tr>
-                                <tr><td><b>Dedicated</b></td><td>Nvidia RTX, AMD Radeon RX</td><td>Professional Gaming နှင့် 4K Video Editing အတွက်။</td></tr>
-                            </tbody>
-                        </table>
-                        <p style="margin-top: 20px;"><b>၂။ VRAM (Video Memory) လိုအပ်ချက်</b></p>
-                        <table class="tech-table">
-                            <thead>
-                                <tr><th>VRAM Size</th><th>Best For</th><th>Example Task</th></tr>
-                            </thead>
-                            <tbody>
-                                <tr><td><b>4GB - 6GB</b></td><td>Budget Gaming</td><td>1080p gaming (Low/Med settings)</td></tr>
-                                <tr><td><b>8GB - 12GB</b></td><td>Standard Gaming</td><td>1440p gaming နှင့် Video Editing</td></tr>
-                                <tr><td><b>16GB+</b></td><td>Pro Work</td><td>4K Gaming နှင့် 3D Rendering</td></tr>
-                            </tbody>
-                        </table>
-                        <p style="margin-top: 15px;"><b>Encoding Tips:</b> Nvidia ရဲ့ <b>NVENC Encoder</b> က Video Render ဆွဲတဲ့အခါ CPU ကို ဝန်မပိစေဘဲ ပိုမြန်စေတဲ့အတွက် Adobe After Effects နဲ့ Premiere Pro သုံးတဲ့သူတွေအတွက် ပိုသင့်တော်ပါတယ်။ AMD Radeon ကတော့ ဈေးနှုန်းနဲ့ Gaming Performance မျှတမှုမှာ အားသာပါတယ်။</p>
-                    </div>
-                </details>
-
+        <!-- Hero -->
+        <section class="hero">
+            <div class="hero-badge">Live Knowledge Base</div>
+            <h1 class="hero-title">Master PC Hardware<br>Like a Pro</h1>
+            <p class="hero-sub">Interactive guides, build calculators, and knowledge quizzes for PC enthusiasts. From budget builds to enthusiast workstations.</p>
+            <div class="hero-stats">
+                <div class="stat-item"><div class="stat-num">6+</div><div class="stat-lbl">Topics</div></div>
+                <div class="stat-item"><div class="stat-num">40</div><div class="stat-lbl">Quiz Questions</div></div>
+                <div class="stat-item"><div class="stat-num">∞</div><div class="stat-lbl">Builds</div></div>
             </div>
         </section>
 
-        <!-- ── OS & Software Card ── -->
-        <section class="tech-card" data-section="os" data-title="windows 11 upgrade cloning macrium nvme linux mint installation">
-            <div class="card-header">💿 OS & Software</div>
-            <div class="list-container">
+        <!-- Section Tabs -->
+        <nav class="section-tabs">
+            <button class="tab-btn active" onclick="filterSection('all')">📚 All Topics</button>
+            <button class="tab-btn" onclick="filterSection('hardware')">🖥️ Hardware</button>
+            <button class="tab-btn" onclick="filterSection('os')">💿 OS & Software</button>
+            <button class="tab-btn" onclick="filterSection('troubleshoot')">🛠️ Troubleshooting</button>
+            <button class="tab-btn" onclick="filterSection('build')">🔧 PC Builds</button>
+            <button class="tab-btn" onclick="filterSection('tools')">✨ Tools</button>
+        </nav>
 
-                <details class="nested-details">
-                    <summary>Windows တင်နည်း အခြေခံများ</summary>
-                    <div class="content">
-                        <p>Windows တင်တဲ့အခါ အဓိက နည်းလမ်း ၃ ခု ရှိပါတယ်-</p>
-                        <table class="tech-table">
-                            <thead>
-                                <tr><th>နည်းလမ်း</th><th>ဖော်ပြချက်</th><th>မှတ်ချက်</th></tr>
-                            </thead>
-                            <tbody>
-                                <tr><td><b>Clean Install</b></td><td>Hard drive တစ်ခုလုံးကို Format ရိုက်ပြီး အသစ်တင်ခြင်း။</td><td>အသန့်ရှင်းဆုံးဖြစ်သည် ✅</td></tr>
-                                <tr><td><b>Upgrade</b></td><td>Windows 10 မှ 11 သို့ ဖိုင်များမပျက်ဘဲ ပြောင်းလဲခြင်း။</td><td>အလွယ်ကူဆုံးဖြစ်သည် ✅</td></tr>
-                                <tr><td><b>Cloning</b></td><td>Windows အဟောင်းကို Hard drive အသစ်ထဲသို့ ပုံတူကူးထည့်ခြင်း။</td><td>Macrium Reflect ကဲ့သို့ Software လိုသည်</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </details>
+        <!-- Cards Grid -->
+        <div class="container" id="contentGrid">
 
-                <details class="nested-details">
-                    <summary>Windows 11 လိုအပ်ချက်များ (System Requirements)</summary>
-                    <div class="content">
-                        <p>Windows 11 တင်ဖို့အတွက် အခြေခံအားဖြင့် ဒါတွေလိုအပ်ပါတယ်-</p>
-                        <table class="tech-table">
-                            <thead>
-                                <tr><th>Component</th><th>Minimum Requirement</th></tr>
-                            </thead>
-                            <tbody>
-                                <tr><td><b>CPU</b></td><td>1 GHz နှင့်အထက် (64-bit) ရှိသော Cores ၂ ခု</td></tr>
-                                <tr><td><b>RAM</b></td><td>4 GB (8 GB ရှိလျှင် ပိုကောင်းပါသည်)</td></tr>
-                                <tr><td><b>Security</b></td><td>TPM Version 2.0 ပါဝင်ရပါမည်</td></tr>
-                                <tr><td><b>Storage</b></td><td>64 GB နှင့်အထက် SSD ရှိသင့်သည်</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </details>
+            <!-- Hardware -->
+            <section class="tech-card" data-section="hardware" data-title="hardware intel amd ryzen cpu gpu nvidia radeon nvenc psu ram ssd hdd ddr4 ddr5 vram">
+                <div class="card-header"><div class="card-header-icon">🖥️</div>Hardware Deep Dive</div>
+                <div class="list-container">
+                    <details class="nested-details">
+                        <summary>Intel vs AMD CPU — Which to Choose?</summary>
+                        <div class="content">
+                            <p>Choose based on your workload:</p>
+                            <table class="tech-table">
+                                <thead><tr><th>Brand</th><th>Series</th><th>Strengths</th></tr></thead>
+                                <tbody>
+                                    <tr><td><b>Intel Core</b></td><td>i3, i5, i7, i9</td><td>Single-core performance & stability 👌</td></tr>
+                                    <tr><td><b>AMD Ryzen</b></td><td>R3, R5, R7, R9</td><td>Multi-core value & efficiency 😎</td></tr>
+                                </tbody>
+                            </table>
+                            <ul style="margin-top:10px">
+                                <li><b>AMD 'G' Series:</b> Integrated GPU ပါ — dedicated GPU မလိုဘဲ budget gaming အတွက်</li>
+                                <li><b>Intel 'F' Series:</b> Dedicated GPU သုံးမယ့်သူအတွက် ဈေးသက်သာ</li>
+                                <li><b>Socket:</b> Intel = LGA, AMD = AM4/AM5 — Motherboard compatibility စစ်ပါ</li>
+                            </ul>
+                        </div>
+                    </details>
+                    <details class="nested-details">
+                        <summary>CPU Cores & Threads Explained</summary>
+                        <div class="content">
+                            <table class="tech-table">
+                                <thead><tr><th>Category</th><th>Specs</th><th>Best For</th></tr></thead>
+                                <tbody>
+                                    <tr><td><b>Entry</b></td><td>2C / 4T</td><td>Office, browsing, basic tasks</td></tr>
+                                    <tr><td><b>Mid-Range</b></td><td>6C / 12T</td><td>Gaming & video editing</td></tr>
+                                    <tr><td><b>High-End</b></td><td>8C+ / 16T+</td><td>Professional rendering & multitasking</td></tr>
+                                </tbody>
+                            </table>
+                            <p style="margin-top:10px;font-size:12px;color:var(--text-3)">Core က physical processing unit ဖြစ်ပြီး Thread က virtual execution path ဖြစ်ပါတယ်</p>
+                        </div>
+                    </details>
+                    <details class="nested-details">
+                        <summary>Storage: HDD vs SSD vs NVMe</summary>
+                        <div class="content">
+                            <table class="tech-table">
+                                <thead><tr><th>Type</th><th>Speed</th><th>Use Case</th></tr></thead>
+                                <tbody>
+                                    <tr><td><b>HDD</b></td><td>Slowest 🐢</td><td>Mass storage, archives, budget builds</td></tr>
+                                    <tr><td><b>SATA SSD</b></td><td>10x faster 😎</td><td>General computing, reliable boot drive</td></tr>
+                                    <tr><td><b>NVMe SSD</b></td><td>Fastest 💀</td><td>Video editing, high-end gaming, workstations</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </details>
+                    <details class="nested-details">
+                        <summary>RAM Technology Guide (DDR3 → DDR5)</summary>
+                        <div class="content">
+                            <table class="tech-table">
+                                <thead><tr><th>Type</th><th>Status</th><th>Notes</th></tr></thead>
+                                <tbody>
+                                    <tr><td><b>DDR3</b></td><td style="color:var(--orange)">Legacy ⚠️</td><td>Old PCs only, limited gaming</td></tr>
+                                    <tr><td><b>DDR4</b></td><td style="color:var(--green)">Standard ✅</td><td>Best value, widely supported</td></tr>
+                                    <tr><td><b>DDR5</b></td><td style="color:var(--cyan)">Premium 🔥</td><td>Latest tech, high-end builds</td></tr>
+                                </tbody>
+                            </table>
+                            <p style="margin-top:10px;font-size:12px;color:var(--text-3)">⚠️ DDR generations မတူလို့ cross-compatible မဖြစ်ဘူး — Motherboard စစ်ပြီးမှ ဝယ်ပါ</p>
+                        </div>
+                    </details>
+                    <details class="nested-details">
+                        <summary>PSU Buying Guide — 80 Plus Ratings</summary>
+                        <div class="content">
+                            <table class="tech-table">
+                                <thead><tr><th>Rating</th><th>Efficiency</th><th>Tier</th></tr></thead>
+                                <tbody>
+                                    <tr><td>80+ White</td><td>80%</td><td>Entry</td></tr>
+                                    <tr><td>80+ Bronze</td><td>82-85%</td><td>Mainstream</td></tr>
+                                    <tr><td>80+ Gold</td><td>87-90%</td><td>High-end ✅</td></tr>
+                                    <tr><td>80+ Platinum</td><td>90-92%</td><td>Enthusiast</td></tr>
+                                </tbody>
+                            </table>
+                            <table class="tech-table" style="margin-top:12px">
+                                <thead><tr><th>Build Type</th><th>Components</th><th>Wattage</th></tr></thead>
+                                <tbody>
+                                    <tr><td>Entry</td><td>i3/R3 + Integrated</td><td>450-550W</td></tr>
+                                    <tr><td>Gaming</td><td>i5/R5 + Mid GPU</td><td>550-650W</td></tr>
+                                    <tr><td>Workstation</td><td>i7/R7 + High GPU</td><td>750W+</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </details>
+                    <details class="nested-details">
+                        <summary>GPU Selection Guide — VRAM & NVENC</summary>
+                        <div class="content">
+                            <table class="tech-table">
+                                <thead><tr><th>VRAM</th><th>Best For</th></tr></thead>
+                                <tbody>
+                                    <tr><td><b>4-6GB</b></td><td>Budget 1080p gaming</td></tr>
+                                    <tr><td><b>8-12GB</b></td><td>1440p gaming & video editing</td></tr>
+                                    <tr><td><b>16GB+</b></td><td>4K gaming & 3D rendering</td></tr>
+                                </tbody>
+                            </table>
+                            <p style="margin-top:10px;font-size:12px;color:var(--text-3)">💡 Nvidia NVENC ဟာ hardware video encoder ဖြစ်ပြီး CPU မပင်ပန်းဘဲ encode လုပ်ပေးတယ်</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
 
-                <details class="nested-details">
-                    <summary>Windows ၁၀/၁၁ တင်နည်း အဆင့်ဆင့် (Step-by-Step)</summary>
-                    <div class="content">
-                        <p>Windows ကို စနစ်တကျ တင်နိုင်ဖို့အတွက် အောက်ပါ အဆင့်အတိုင်း လုပ်ဆောင်ရပါမယ်-</p>
-                        <table class="tech-table">
-                            <thead>
-                                <tr><th>အဆင့် (Step)</th><th>လုပ်ဆောင်ရန် အချက်များ</th><th>မှတ်ချက်</th></tr>
-                            </thead>
-                            <tbody>
-                                <tr><td><b>၁။ Bootable USB ပြုလုပ်ခြင်း</b></td><td>Rufus သို့မဟုတ် Windows Media Creation Tool သုံးပြီး 8GB+ USB ထဲသို့ ISO ဖိုင်ထည့်ပါ။</td><td>File ပျက်နိုင်၍ Backup လုပ်ထားပါ ⚠️</td></tr>
-                                <tr><td><b>၂။ BIOS/Boot Menu ဝင်ခြင်း</b></td><td>စက်စပွင့်ချင်း F2, F12 သို့မဟုတ် Del key ကို နှိပ်ပြီး USB ကို ပထမဆုံး Boot တက်အောင် ရွေးပါ။</td><td>Motherboard အလိုက် Key ကွဲပြားသည်</td></tr>
-                                <tr><td><b>၃။ Partition ပိုင်းခြင်း</b></td><td>Windows တင်မည့် Drive ကို ရွေးချယ်ပြီး New Partition ဆောက်ပါ။</td><td>Drive မှားမဖျက်မိစေရန် သတိပြုပါ ⛔</td></tr>
-                                <tr><td><b>၄။ Installation စတင်ခြင်း</b></td><td>"Install Now" ကိုနှိပ်ပြီး Windows ကူးယူပြီးသည်အထိ စောင့်ပါ။ စက်အလိုအလျောက် Restart ကျပါလိမ့်မည်။</td><td>USB ကို Restart ကျချိန်တွင် ဖြုတ်နိုင်သည်</td></tr>
-                            </tbody>
-                        </table>
-                        <p style="margin-top: 15px;"><b>အရေးကြီးသောအချက်:</b> Windows တင်ပြီးပါက Drivers များ (ဥပမာ- Graphics Driver, Chipset Driver) ကို မဖြစ်မနေ Update လုပ်ပေးရပါမယ်။</p>
-                    </div>
-                </details>
+            <!-- OS & Software -->
+            <section class="tech-card" data-section="os" data-title="windows 11 upgrade cloning macrium nvme linux mint installation rufus bootable">
+                <div class="card-header"><div class="card-header-icon">💿</div>OS & Software</div>
+                <div class="list-container">
+                    <details class="nested-details">
+                        <summary>Windows Installation Methods</summary>
+                        <div class="content">
+                            <table class="tech-table">
+                                <thead><tr><th>Method</th><th>Description</th><th>Notes</th></tr></thead>
+                                <tbody>
+                                    <tr><td><b>Clean Install</b></td><td>Format + fresh install</td><td>Cleanest ✅</td></tr>
+                                    <tr><td><b>Upgrade</b></td><td>Win 10 → 11 without data loss</td><td>Easiest ✅</td></tr>
+                                    <tr><td><b>Cloning</b></td><td>Copy OS to new drive</td><td>Needs Macrium Reflect</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </details>
+                    <details class="nested-details">
+                        <summary>Windows 11 System Requirements</summary>
+                        <div class="content">
+                            <table class="tech-table">
+                                <thead><tr><th>Component</th><th>Minimum</th></tr></thead>
+                                <tbody>
+                                    <tr><td><b>CPU</b></td><td>1GHz+ (64-bit, 2 cores)</td></tr>
+                                    <tr><td><b>RAM</b></td><td>4GB (8GB recommended)</td></tr>
+                                    <tr><td><b>Security</b></td><td>TPM 2.0 ⚠️ မရှိမဖြစ်</td></tr>
+                                    <tr><td><b>Storage</b></td><td>64GB+ SSD</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </details>
+                    <details class="nested-details">
+                        <summary>Windows 10/11 Step-by-Step Install</summary>
+                        <div class="content">
+                            <table class="tech-table">
+                                <thead><tr><th>Step</th><th>Action</th><th>Note</th></tr></thead>
+                                <tbody>
+                                    <tr><td><b>1. Bootable USB</b></td><td>Rufus + ISO ထည့်ပါ (8GB+)</td><td>Backup first ⚠️</td></tr>
+                                    <tr><td><b>2. BIOS</b></td><td>F2/F12/Del → USB boot ပထမ</td><td>Board အလိုက် key ကွဲ</td></tr>
+                                    <tr><td><b>3. Partition</b></td><td>Drive ရွေး → New Partition</td><td>မမှားမဖျက်မိနဲ့ ⛔</td></tr>
+                                    <tr><td><b>4. Install</b></td><td>"Install Now" → စောင့်ပါ</td><td>Restart မှာ USB ဖြုတ်</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </details>
+                    <details class="nested-details">
+                        <summary>Linux Dual Boot with Windows</summary>
+                        <div class="content">
+                            <ul>
+                                <li><b>Disk Space:</b> Disk Management မှာ 50GB+ Shrink လုပ်ပါ</li>
+                                <li><b>Bootable USB:</b> Linux Mint ISO + BalenaEtcher</li>
+                                <li><b>Install Type:</b> "Install alongside Windows" ရွေးပါ</li>
+                                <li><b>GRUB:</b> Boot မှာ OS ရွေးချယ်နိုင်တဲ့ menu ပေါ်လာမယ်</li>
+                            </ul>
+                        </div>
+                    </details>
+                    <details class="nested-details">
+                        <summary>Windows Keyboard Shortcuts</summary>
+                        <div class="content">
+                            <table class="tech-table">
+                                <thead><tr><th>Shortcut</th><th>Action</th></tr></thead>
+                                <tbody>
+                                    <tr><td><b>Win + E</b> <button class="copy-btn" onclick="copyText('Win + E', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copy</button></td><td>File Explorer</td></tr>
+                                    <tr><td><b>Win + D</b> <button class="copy-btn" onclick="copyText('Win + D', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copy</button></td><td>Show Desktop</td></tr>
+                                    <tr><td><b>Ctrl+Shift+Esc</b> <button class="copy-btn" onclick="copyText('Ctrl+Shift+Esc', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copy</button></td><td>Task Manager</td></tr>
+                                    <tr><td><b>Alt + Tab</b> <button class="copy-btn" onclick="copyText('Alt + Tab', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copy</button></td><td>Switch Windows</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </details>
+                </div>
+            </section>
 
-                <details class="nested-details">
-                    <summary>Linux တင်နည်းနှင့် Windows နှင့် Dual Boot လုပ်နည်း</summary>
-                    <div class="content">
-                        <p>Windows ကို မဖြုတ်ဘဲ Linux Mint or other os, ကို ဘေးချင်းယှဉ်တွဲသုံးနိုင်မယ့် Dual Boot တင်နည်း အဆင့်ဆင့် ဖြစ်ပါတယ်-</p>
-                        <table class="tech-table">
-                            <thead>
-                                <tr><th>အဆင့် (Step)</th><th>လုပ်ဆောင်ရန် အချက်များ</th><th>မှတ်ချက်</th></tr>
-                            </thead>
-                            <tbody>
-                                <tr><td><b>၁။ Disk Space ဖယ်ခြင်း</b></td><td>Windows ရဲ့ "Disk Management" ထဲမှာ Linux အတွက် အနည်းဆုံး 50GB ခန့် Shrink လုပ်ပြီး နေရာလွတ်ဖယ်ပါ။</td><td>Unallocated Space ဖြစ်နေရပါမယ်</td></tr>
-                                <tr><td><b>၂။ Bootable USB လုပ်ခြင်း</b></td><td>Linux Mint ISO ကို Rufus သို့မဟုတ် BalenaEtcher သုံးပြီး USB ထဲ ထည့်ပါ။</td><td>Linux Mint Cinnamon edition ကို အကြံပြုပါသည်</td></tr>
-                                <tr><td><b>၃။ Installation Type</b></td><td>Install လုပ်စဉ် "Install Linux Mint alongside Windows" ကို ရွေးချယ်ပါ။</td><td>ဒါက အလွယ်ဆုံးနဲ့ အန္တရာယ်အကင်းဆုံးပါ ✅</td></tr>
-                                <tr><td><b>၄။ Boot Menu</b></td><td>တင်ပြီးသွားရင် စက်စဖွင့်ချင်းမှာ Windows သို့မဟုတ် Linux Mint ကြိုက်ရာရွေးသုံးနိုင်တဲ့ Menu ပေါ်လာပါလိမ့်မယ်။</td><td>GRUB Bootloader ဟု ခေါ်သည်</td></tr>
-                            </tbody>
-                        </table>
-                        <p style="margin-top: 15px;"><b>Linux Mint ရဲ့ အားသာချက်များ-</b></p>
-                        <ul>
-                            <li><b>Customization:</b> Windows ထက် ပိုမိုလှပအောင် စိတ်ကြိုက် ပြင်ဆင်နိုင်ခြင်း။</li>
-                            <li><b>Performance:</b> Windows ထက် ပေါ့ပါးပြီး Software တော်တော်များများကို အခမဲ့ သုံးနိုင်ခြင်း။</li>
-                            <li><b>Stability:</b> Virus အန္တရာယ် နည်းပါးပြီး PC အဟောင်းများမှာပင် မြန်ဆန်ခြင်း။</li>
-                        </ul>
-                    </div>
-                </details>
+            <!-- Troubleshooting -->
+            <section class="tech-card" data-section="troubleshoot" data-title="freezing ram short thermal paste grease overheating crystaldiskinfo contact cleaner safety breaker">
+                <div class="card-header"><div class="card-header-icon" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">🛠️</div>Troubleshooting</div>
+                <div class="list-container">
+                    <details class="nested-details">
+                        <summary>PC Freezing — Causes & Fixes</summary>
+                        <div class="content">
+                            <table class="tech-table">
+                                <thead><tr><th>Cause</th><th>Problem</th><th>Fix</th></tr></thead>
+                                <tbody>
+                                    <tr><td><b>Hardware Short</b></td><td>RAM slot ထဲ ဖုန်မှုန့် ဝင်ခြင်း</td><td>Contact Cleaner သုံးပြီး သေချာ ရှင်းပါ</td></tr>
+                                    <tr><td><b>Overheating</b></td><td>CPU temp အရမ်းတက်ခြင်း</td><td>Thermal Paste အသစ်လဲ၊ Fan စစ်ပါ</td></tr>
+                                    <tr><td><b>Drive Failure</b></td><td>SSD/HDD ပျက်စီးခြင်း</td><td>CrystalDiskInfo နဲ့ စစ်ဆေးပါ</td></tr>
+                                </tbody>
+                            </table>
+                            <p style="margin-top:10px;font-size:12px;color:var(--orange)">⚠️ Thermal Paste လဲတဲ့အခါ RAM slot ထဲ Grease မဝင်သွားအောင် သတိထားပါ</p>
+                        </div>
+                    </details>
+                    <details class="nested-details">
+                        <summary>Electrical Safety Tips</summary>
+                        <div class="content">
+                            <table class="tech-table">
+                                <thead><tr><th>Danger</th><th>Cause</th><th>Prevention</th></tr></thead>
+                                <tbody>
+                                    <tr><td><b>Charger ပေါက်ကွဲ</b></td><td>Low quality charger + USB RGB</td><td>Samsung/Anker/Apple ပဲသုံးပါ</td></tr>
+                                    <tr><td><b>Breaker ကျ</b></td><td>Short circuit ဖြစ်ခြင်း</td><td>ချက်ချင်းဖြုတ်ပါ</td></tr>
+                                    <tr><td><b>Hardware လောင်</b></td><td>Generic PSU အသုံးပြုခြင်း</td><td>80 Plus rated PSU သုံးပါ</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </details>
+                </div>
+            </section>
 
-                <details class="nested-details">
-                    <summary>အသုံးဝင်သော Website လင့်ခ်များ</summary>
-                    <div class="content">
-                        <table class="tech-table">
-                            <thead>
-                                <tr><th>အမျိုးအစား</th><th>Website အမည်</th><th>လင့်ခ်</th></tr>
-                            </thead>
-                            <tbody>
-                                <tr><td><b>Drivers</b></td><td>Intel / AMD / Nvidia Support</td><td>Official Support Pages</td></tr>
-                                <tr><td><b>Software</b></td><td>Ninite.com</td><td>Software အများကြီးကို တစ်ခါတည်း သွင်းရန်</td></tr>
-                                <tr><td><b>OS ISO</b></td><td>Microsoft Software Download</td><td>Windows 10/11 ISO များ</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </details>
+            <!-- PC Builds -->
+            <section class="tech-card" data-section="build" data-title="pc build combo 2026 ryzen rtx gaming workstation budget">
+                <div class="card-header"><div class="card-header-icon" style="background:linear-gradient(135deg,#a855f7,#ec4899)">🔧</div>PC Build Combos 2026</div>
+                <div class="list-container">
+                    <details class="nested-details">
+                        <summary>🔥 Ultimate 4K Enthusiast Build</summary>
+                        <div class="content">
+                            <ul>
+                                <li><b>CPU:</b> Ryzen 9 9950X3D <span class="price-tag">~3,200,000 ks</span></li>
+                                <li><b>GPU:</b> RTX 5090 (32GB) <span class="price-tag">~8,500,000 ks</span></li>
+                                <li><b>M/B:</b> X870E Enthusiast Board <span class="price-tag">~950,000 ks</span></li>
+                                <li><b>RAM:</b> 64GB DDR5-8000MHz <span class="price-tag">~680,000 ks</span></li>
+                                <li><b>SSD:</b> 4TB Gen 5 NVMe <span class="price-tag">~520,000 ks</span></li>
+                                <li><b>PSU:</b> 1200W Platinum <span class="price-tag">~380,000 ks</span></li>
+                            </ul>
+                            <div class="build-total">💰 Estimated Total: ~14,230,000 ks</div>
+                        </div>
+                    </details>
+                    <details class="nested-details">
+                        <summary>💜 High-Performance 1440p Build</summary>
+                        <div class="content">
+                            <ul>
+                                <li><b>CPU:</b> Ryzen 7 9800X3D <span class="price-tag">~1,650,000 ks</span></li>
+                                <li><b>GPU:</b> RTX 5070 Ti <span class="price-tag">~2,800,000 ks</span></li>
+                                <li><b>M/B:</b> B850 Mainstream Board <span class="price-tag">~420,000 ks</span></li>
+                                <li><b>RAM:</b> 32GB DDR5-6400MHz <span class="price-tag">~300,000 ks</span></li>
+                                <li><b>SSD:</b> 2TB PCIe 4.0 NVMe <span class="price-tag">~250,000 ks</span></li>
+                                <li><b>PSU:</b> 850W Gold <span class="price-tag">~180,000 ks</span></li>
+                            </ul>
+                            <div class="build-total">💰 Estimated Total: ~5,600,000 ks</div>
+                        </div>
+                    </details>
+                    <details class="nested-details">
+                        <summary>💚 Budget Gaming 1080p Build</summary>
+                        <div class="content">
+                            <ul>
+                                <li><b>CPU:</b> Intel i5-14400F <span class="price-tag">~320,000 ks</span></li>
+                                <li><b>GPU:</b> RTX 4060 Ti <span class="price-tag">~580,000 ks</span></li>
+                                <li><b>M/B:</b> B760M Budget Board <span class="price-tag">~180,000 ks</span></li>
+                                <li><b>RAM:</b> 16GB DDR4 <span class="price-tag">~90,000 ks</span></li>
+                                <li><b>SSD:</b> 1TB NVMe <span class="price-tag">~70,000 ks</span></li>
+                                <li><b>PSU:</b> 650W Gold <span class="price-tag">~90,000 ks</span></li>
+                            </ul>
+                            <div class="build-total">💰 Estimated Total: ~1,330,000 ks</div>
+                        </div>
+                    </details>
+                </div>
+            </section>
 
-                <details class="nested-details">
-                    <summary>Windows တင်ပြီးလျှင် မရှိမဖြစ်သွင်းရမည့် Software များ</summary>
-                    <div class="content">
-                        <table class="tech-table">
-                            <thead>
-                                <tr><th>Category</th><th>Software Name</th><th>အသုံးပြုပုံ</th></tr>
-                            </thead>
-                            <tbody>
-                                <tr><td><b>Browser</b></td><td>Google Chrome / Brave</td><td>အင်တာနက်ကြည့်ရန်</td></tr>
-                                <tr><td><b>Office</b></td><td>Microsoft Office / LibreOffice</td><td>စာစီစာကုံးနှင့် ဇယားတွက်ရန်</td></tr>
-                                <tr><td><b>Compression</b></td><td>7-Zip / WinRAR</td><td>ဖိုင်များချုံ့ရန်နှင့် ဖြေရန်</td></tr>
-                                <tr><td><b>Driver</b></td><td>Driver Booster / Official Web</td><td>Hardware များ အလုပ်လုပ်စေရန်</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </details>
-
-                <details class="nested-details">
-                    <summary>Windows Keyboard Shortcuts (အသုံးများသော ခလုတ်များ)</summary>
-                    <div class="content">
-                        <table class="tech-table">
-                            <thead>
-                                <tr><th>Shortcuts</th><th>လုပ်ဆောင်ချက်</th></tr>
-                            </thead>
-                            <tbody>
-                                <tr><td><b>Win + E</b> <button class="copy-btn" onclick="copyText('Win + E', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copy</button></td><td>File Explorer ဖွင့်ရန်</td></tr>
-                                <tr><td><b>Win + D</b> <button class="copy-btn" onclick="copyText('Win + D', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copy</button></td><td>Desktop ဆီ တန်းသွားရန်</td></tr>
-                                <tr><td><b>Ctrl + Shift + Esc</b> <button class="copy-btn" onclick="copyText('Ctrl + Shift + Esc', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copy</button></td><td>Task Manager ဖွင့်ရန် (စက်ဟန်းရင် သုံးသည်)</td></tr>
-                                <tr><td><b>Alt + Tab</b> <button class="copy-btn" onclick="copyText('Alt + Tab', this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copy</button></td><td>Window တစ်ခုမှတစ်ခုသို့ ကူးပြောင်းရန်</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </details>
-
-            </div>
-        </section>
-
-        <!-- ── Troubleshooting Card ── -->
-        <section class="tech-card" data-section="troubleshoot" data-title="freezing ram short motherboard grease gta crash">
-            <div class="card-header">🛠️ Troubleshooting</div>
-            <div class="list-container">
-
-                <details class="nested-details">
-                    <summary>PC Freezing - စက်ခဏခဏ ဟန်းရခြင်း အကြောင်းရင်းများ</summary>
-                    <div class="content">
-                        <p>PC Freeze ဖြစ်ရတဲ့ အဓိက အကြောင်းရင်း ၃ ခုနဲ့ ဖြေရှင်းနည်းတွေကတော့-</p>
-                        <table class="tech-table">
-                            <thead>
-                                <tr><th>အကြောင်းရင်း</th><th>ပြဿနာ</th><th>ဖြေရှင်းနည်း</th></tr>
-                            </thead>
-                            <tbody>
-                                <tr><td><b>Hardware Short</b></td><td>RAM slot ထဲ ဖုန်မှုန့်/အညစ်အကြေးများ ဝင်ခြင်း။</td><td>RAM slot ကို Contact Cleaner ဖြင့် သေချာရှင်းလင်းပါ။</td></tr>
-                                <tr><td><b>Overheating</b></td><td>CPU အပူချိန် အရမ်းတက်နေခြင်း။</td><td>Thermal Paste အသစ်ပြန်ထည့်ပြီး Fan များ လည်၊ မလည် စစ်ပါ။</td></tr>
-                                <tr><td><b>Drive Failure</b></td><td>SSD သို့မဟုတ် HDD ပျက်စီးနေခြင်း။</td><td>Drive ကျန်းမာရေးကို CrystalDiskInfo ဖြင့် စစ်ဆေးပါ။</td></tr>
-                            </tbody>
-                        </table>
-                        <p style="margin-top: 15px;"><b>အရေးကြီးသော သင်ခန်းစာ:</b> PC ကို Thermal Paste အသစ်လဲတဲ့အခါ Motherboard ရဲ့ အစိတ်အပိုင်းတွေထဲ (အထူးသဖြင့် RAM slot) Grease တွေ မဝင်သွားအောင် အထူးသတိထားဖို့ လိုအပ်ပါတယ်။ Grease ဝင်သွားရင် BIOS ထဲမှာတောင် PC Freeze ဖြစ်တတ်ပါတယ်။</p>
-                    </div>
-                </details>
-
-            </div>
-        </section>
-
-        <!-- ── PC Build Combos Card ── -->
-        <section class="tech-card" data-section="build" data-title="full pc build combo 2026 specs gaming workstation">
-            <div class="card-header">🛠️ Full PC Build Combos (2026 Edition)</div>
-            <div class="list-container">
-
-                <details class="nested-details">
-                    <summary>Ultimate 4K Enthusiast Build</summary>
-                    <div class="content">
-                        <ul>
-                            <li><b>CPU:</b> Ryzen 9 9950X3D</li>
-                            <li><b>GPU:</b> RTX 5090 (32GB)</li>
-                            <li><b>M/B:</b> X870E Enthusiast Board</li>
-                            <li><b>RAM:</b> 64GB DDR5-8000MHz</li>
-                            <li><b>SSD:</b> 4TB Gen 5 NVMe</li>
-                            <li><b>PSU:</b> 1200W Platinum</li>
-                        </ul>
-                    </div>
-                </details>
-
-                <details class="nested-details">
-                    <summary>High-Performance 1440p Build</summary>
-                    <div class="content">
-                        <ul>
-                            <li><b>CPU:</b> Ryzen 7 9800X3D</li>
-                            <li><b>GPU:</b> RTX 5070 Ti</li>
-                            <li><b>M/B:</b> B850 Mainstream Board</li>
-                            <li><b>RAM:</b> 32GB DDR5-6400MHz</li>
-                            <li><b>SSD:</b> 2TB PCIe 4.0 NVMe</li>
-                            <li><b>PSU:</b> 850W Gold</li>
-                        </ul>
-                    </div>
-                </details>
-
-                <details class="nested-details">
-                    <summary>Budget Gaming Warrior (1080p)</summary>
-                    <div class="content">
-                        <ul>
-                            <li><b>CPU:</b> Intel i5-14400F</li>
-                            <li><b>GPU:</b> RTX 5060 / 4060 Ti</li>
-                            <li><b>RAM:</b> 16GB DDR5</li>
-                            <li><b>SSD:</b> 1TB NVMe</li>
-                            <li><b>PSU:</b> 650W Bronze</li>
-                        </ul>
-                    </div>
-                </details>
-
-            </div>
-        </section>
-
-        <!-- ── Safety Tips Card ── -->
-        <section class="tech-card" data-section="troubleshoot" data-title="safety charger explode rgb breaker electrical fire prevention">
-            <div class="card-header">⚠️ Safety Tips</div>
-            <div class="list-container">
-
-                <details class="nested-details">
-                    <summary>လျှပ်စစ်အန္တရာယ် ကာကွယ်ရေး သင်ခန်းစာများ</summary>
-                    <div class="content">
-                        <p>လျှပ်စစ်ပစ္စည်းတွေ သုံးတဲ့အခါ မတော်တဆမှု မဖြစ်အောင် ဒါတွေကို သတိထားရပါမယ်-</p>
-                        <table class="tech-table">
-                            <thead>
-                                <tr><th>အန္တရာယ်</th><th>ဖြစ်ပွားနိုင်သည့် အကြောင်းရင်း</th><th>ကာကွယ်နည်း</th></tr>
-                            </thead>
-                            <tbody>
-                                <tr><td><b>Charger ပေါက်ကွဲခြင်း</b></td><td>အရည်အသွေးမပြည့်မီသော Charger တွင် ပါဝါစားများသည့် USB RGB Lights များ ထိုးမိခြင်း။</td><td>နာမည်ကြီး Brand (ဥပမာ- Samsung, Apple, Anker) စစ်စစ်များကိုသာ သုံးပါ။</td></tr>
-                                <tr><td><b>Breaker ကျခြင်း</b></td><td>လျှပ်စစ်ပစ္စည်းတစ်ခုခုတွင် Short circuit ဖြစ်နေခြင်း။</td><td>Breaker ခဏခဏ ကျနေပါက မသင်္ကာသော ပစ္စည်းကို ချက်ချင်းဖြုတ်ပါ။</td></tr>
-                                <tr><td><b>Hardware လောင်ကျွမ်းခြင်း</b></td><td>အရည်အသွေးညံ့သော PSU (Power Supply) သုံးစွဲခြင်း။</td><td>80 Plus Rating ပါဝင်သော PSU ကိုသာ သုံးစွဲပါ။</td></tr>
-                            </tbody>
-                        </table>
-                        <p style="margin-top: 15px;"><b>ကျနော်ကိုယ်တွေ့သင်ခန်းစာ:</b> 45W Charger တစ်ခုကို RGB Light ထိုးမိရာကနေ ပေါက်ကွဲပြီး အိမ်ရဲ့ Main Breaker ပါ ကျသွားတဲ့အထိ အန္တရာယ်ရှိနိုင်ပါတယ်။ ဒါကြောင့် ပါဝါအထွက် (Wattage) နဲ့ ပစ္စည်းရဲ့ အရည်အသွေးကို အမြဲစစ်ဆေးပါ။</p>
-                    </div>
-                </details>
-
-                <details class="nested-details">
-                    <summary>ကွန်ပျူတာ အသုံးပြုရာတွင် သတိပြုရန်များ</summary>
-                    <div class="content">
-                        <ul>
-                            <li><b>Liquid:</b> ကွန်ပျူတာအနီးတွင် ရေခွက်၊ ကော်ဖီခွက်များ မထားပါနှင့်။</li>
-                            <li><b>Cleaning:</b> PC ကို သန့်ရှင်းရေးလုပ်လျှင် ပါဝါပိတ်ရုံတင်မကဘဲ ပလပ်ပါ ဖြုတ်ထားရပါမည်။</li>
-                            <li><b>Thunder:</b> မိုးကြိုးပစ်နေချိန်တွင် ကွန်ပျူတာနှင့် အင်တာနက် Router များကို ခေတ္တပိတ်ထားသင့်သည်။</li>
-                        </ul>
-                    </div>
-                </details>
-
-            </div>
-        </section>
-
-        <!-- ── About Author Card ── -->
-        <section class="tech-card" data-section="about" data-title="about author mg kyaw developer roblox minecraft gta">
-            <div class="card-header">👤 About the Author</div>
-            <div class="list-container">
-                <div class="author-info" style="text-align: center; padding: 10px;">
-                    <h3>Kyaw Khant Thu</h3>
-                    <p style="margin: 10px 0;">PC Hardware Enthusiast & Web Developer</p>
-                    <p>မင်္ဂလာပါ! ကျွန်တော်ကတော့ နည်းပညာနဲ့ ဂိမ်းတွေကို စိတ်ဝင်စားတဲ့ Mg Kyaw ဖြစ်ပါတယ်ဗျ Minecraft mods တွေ ၊ Roblox game development နဲ့ PC တည်ဆောက်ပုံတွေကို လေ့လာနေသူ တစ်ယောက်ပါဗျာ။</p>
-                    <div class="interest-tags" style="margin-top: 15px;">
-                        <span class="tag">#MinecraftModder</span>
-                        <span class="tag">#RobloxDev</span>
-                        <span class="tag">#PCHardware</span>
+            <!-- About -->
+            <section class="tech-card" data-section="about" data-title="about author mg kyaw developer roblox minecraft gta">
+                <div class="card-header"><div class="card-header-icon" style="background:linear-gradient(135deg,#10b981,#3b82f6)">👤</div>About the Author</div>
+                <div class="list-container">
+                    <div style="text-align:center;padding:10px 0">
+                        <div style="width:60px;height:60px;background:linear-gradient(135deg,#00d4ff,#a855f7);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 12px">👨‍💻</div>
+                        <div style="font-family:'Outfit', sans-serif;font-size:1.1rem;font-weight:700;margin-bottom:4px">Kyaw Khant Thu</div>
+                        <div style="font-size:12px;color:var(--text-3);margin-bottom:12px">PC Hardware Enthusiast & Web Developer</div>
+                        <p style="font-size:13px;color:var(--text-2);line-height:1.7">မင်္ဂလာပါ! နည်းပညာနဲ့ ဂိမ်းတွေကို စိတ်ဝင်စားတဲ့ Mg Kyaw ဖြစ်ပါတယ်ဗျ။ Minecraft mods, Roblox development နဲ့ PC building တွေကို လေ့လာနေသူ တစ်ယောက်ပါ။</p>
+                        <div style="margin-top:12px;display:flex;gap:6px;flex-wrap:wrap;justify-content:center">
+                            <span class="tag">#MinecraftModder</span>
+                            <span class="tag">#RobloxDev</span>
+                            <span class="tag">#PCHardware</span>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <!-- ── PC Part Price Calculator ── -->
-        <section class="tech-card" data-section="tools" data-title="calculator price budget pc parts">
-            <div class="card-header">🧮 PC Part Price Calculator</div>
-            <div class="list-container">
-                <p style="font-size:13px; color:var(--text-dim); margin-bottom:14px;">အောက်က parts တွေ ရွေးလိုက်ရင် estimated budget ထုတ်ပေးမယ် 💰</p>
-                <div class="calc-grid">
-                    <div class="calc-item">
-                        <label>🔲 CPU</label>
-                        <select id="calc-cpu">
-                            <option value="0">— မရွေးသေး —</option>
-                            <option value="120000">Intel i3-12100F (~120,000 ks)</option>
-                            <option value="280000">Intel i5-13400F (~280,000 ks)</option>
-                            <option value="450000">Intel i7-13700K (~450,000 ks)</option>
-                            <option value="200000">AMD Ryzen 5 5600X (~200,000 ks)</option>
-                            <option value="380000">AMD Ryzen 7 7700X (~380,000 ks)</option>
-                            <option value="750000">AMD Ryzen 9 7950X (~750,000 ks)</option>
-                        </select>
+            <!-- Calculator -->
+            <section class="tech-card" data-section="tools" data-title="calculator price budget pc parts kyat">
+                <div class="card-header"><div class="card-header-icon" style="background:linear-gradient(135deg,#f59e0b,#10b981)">🧮</div>PC Budget Calculator</div>
+                <div class="list-container">
+                    <p style="font-size:13px;color:var(--text-3);margin-bottom:12px">Parts ရွေးလိုက်ရင် estimated budget ထုတ်ပေးမယ် 💰</p>
+                    <div class="calc-grid">
+                        <div class="calc-item">
+                            <label>🔲 CPU</label>
+                            <select id="calc-cpu">
+                                <option value="0">— Select —</option>
+                                <option value="120000">Intel i3-12100F (~120k ks)</option>
+                                <option value="280000">Intel i5-13400F (~280k ks)</option>
+                                <option value="450000">Intel i7-13700K (~450k ks)</option>
+                                <option value="200000">Ryzen 5 5600X (~200k ks)</option>
+                                <option value="380000">Ryzen 7 7700X (~380k ks)</option>
+                                <option value="750000">Ryzen 9 7950X (~750k ks)</option>
+                            </select>
+                        </div>
+                        <div class="calc-item">
+                            <label>🎮 GPU</label>
+                            <select id="calc-gpu">
+                                <option value="0">— Select —</option>
+                                <option value="250000">RTX 3060 (~250k ks)</option>
+                                <option value="450000">RTX 4060 Ti (~450k ks)</option>
+                                <option value="700000">RTX 4070 (~700k ks)</option>
+                                <option value="1200000">RTX 4080 (~1.2M ks)</option>
+                                <option value="200000">RX 6600 (~200k ks)</option>
+                                <option value="400000">RX 7700 XT (~400k ks)</option>
+                            </select>
+                        </div>
+                        <div class="calc-item">
+                            <label>💾 RAM</label>
+                            <select id="calc-ram">
+                                <option value="0">— Select —</option>
+                                <option value="50000">8GB DDR4 (~50k ks)</option>
+                                <option value="90000">16GB DDR4 (~90k ks)</option>
+                                <option value="160000">32GB DDR4 (~160k ks)</option>
+                                <option value="120000">16GB DDR5 (~120k ks)</option>
+                                <option value="220000">32GB DDR5 (~220k ks)</option>
+                            </select>
+                        </div>
+                        <div class="calc-item">
+                            <label>💿 Storage</label>
+                            <select id="calc-storage">
+                                <option value="0">— Select —</option>
+                                <option value="30000">500GB SATA SSD (~30k)</option>
+                                <option value="55000">1TB SATA SSD (~55k)</option>
+                                <option value="70000">1TB NVMe (~70k)</option>
+                                <option value="130000">2TB NVMe (~130k)</option>
+                            </select>
+                        </div>
+                        <div class="calc-item">
+                            <label>🔌 PSU</label>
+                            <select id="calc-psu">
+                                <option value="0">— Select —</option>
+                                <option value="60000">550W Bronze (~60k)</option>
+                                <option value="90000">650W Gold (~90k)</option>
+                                <option value="130000">750W Gold (~130k)</option>
+                                <option value="200000">850W Platinum (~200k)</option>
+                            </select>
+                        </div>
+                        <div class="calc-item">
+                            <label>🖥️ Motherboard</label>
+                            <select id="calc-mobo">
+                                <option value="0">— Select —</option>
+                                <option value="100000">B660M Budget (~100k)</option>
+                                <option value="180000">B760 Mid (~180k)</option>
+                                <option value="280000">Z790 High (~280k)</option>
+                                <option value="120000">B550 AMD (~120k)</option>
+                                <option value="220000">X670 AMD (~220k)</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="calc-item">
-                        <label>🎮 GPU</label>
-                        <select id="calc-gpu">
-                            <option value="0">— မရွေးသေး —</option>
-                            <option value="250000">RTX 3060 (~250,000 ks)</option>
-                            <option value="450000">RTX 4060 Ti (~450,000 ks)</option>
-                            <option value="700000">RTX 4070 (~700,000 ks)</option>
-                            <option value="1200000">RTX 4080 (~1,200,000 ks)</option>
-                            <option value="200000">RX 6600 (~200,000 ks)</option>
-                            <option value="400000">RX 7700 XT (~400,000 ks)</option>
-                        </select>
-                    </div>
-                    <div class="calc-item">
-                        <label>💾 RAM</label>
-                        <select id="calc-ram">
-                            <option value="0">— မရွေးသေး —</option>
-                            <option value="50000">8GB DDR4 (~50,000 ks)</option>
-                            <option value="90000">16GB DDR4 (~90,000 ks)</option>
-                            <option value="160000">32GB DDR4 (~160,000 ks)</option>
-                            <option value="120000">16GB DDR5 (~120,000 ks)</option>
-                            <option value="220000">32GB DDR5 (~220,000 ks)</option>
-                        </select>
-                    </div>
-                    <div class="calc-item">
-                        <label>💿 Storage</label>
-                        <select id="calc-storage">
-                            <option value="0">— မရွေးသေး —</option>
-                            <option value="30000">500GB SATA SSD (~30,000 ks)</option>
-                            <option value="55000">1TB SATA SSD (~55,000 ks)</option>
-                            <option value="70000">1TB NVMe SSD (~70,000 ks)</option>
-                            <option value="130000">2TB NVMe SSD (~130,000 ks)</option>
-                        </select>
-                    </div>
-                    <div class="calc-item">
-                        <label>🔌 PSU</label>
-                        <select id="calc-psu">
-                            <option value="0">— မရွေးသေး —</option>
-                            <option value="60000">550W Bronze (~60,000 ks)</option>
-                            <option value="90000">650W Gold (~90,000 ks)</option>
-                            <option value="130000">750W Gold (~130,000 ks)</option>
-                            <option value="200000">850W Platinum (~200,000 ks)</option>
-                        </select>
-                    </div>
-                    <div class="calc-item">
-                        <label>🖥️ Motherboard</label>
-                        <select id="calc-mobo">
-                            <option value="0">— မရွေးသေး —</option>
-                            <option value="100000">B660M Budget (~100,000 ks)</option>
-                            <option value="180000">B760 Mid-range (~180,000 ks)</option>
-                            <option value="280000">Z790 High-end (~280,000 ks)</option>
-                            <option value="120000">B550 AMD (~120,000 ks)</option>
-                            <option value="220000">X670 AMD (~220,000 ks)</option>
-                        </select>
+                    <button class="calc-btn" onclick="calculatePC()">⚡ Calculate Budget</button>
+                    <div class="calc-result" id="calc-result">
+                        <div class="calc-result-label">Estimated Total Budget</div>
+                        <div class="calc-result-total" id="calc-total"></div>
+                        <ul class="calc-result-breakdown" id="calc-breakdown"></ul>
+                        <div id="calc-tier" class="calc-tier"></div>
                     </div>
                 </div>
-                <button class="calc-btn" onclick="calculatePC()">⚡ Budget တွက်မယ်</button>
-                <div class="calc-result" id="calc-result">
-                    <div class="calc-result-title">Estimated Total Budget</div>
-                    <div class="calc-result-total" id="calc-total"></div>
-                    <ul class="calc-result-breakdown" id="calc-breakdown"></ul>
-                    <div id="calc-tier" class="calc-tier"></div>
-                </div>
-            </div>
-        </section>
+            </section>
 
-        <!-- ── PC Knowledge Quiz ── -->
-        <section class="tech-card" data-section="tools" data-title="quiz test knowledge pc hardware">
-            <div class="card-header">🎯 PC Knowledge Quiz</div>
-            <div class="list-container">
-                <div class="quiz-wrap" id="quiz-wrap">
-                    <div class="quiz-progress-bar-wrap">
-                        <div class="quiz-progress-bar" id="quiz-bar" style="width:0%"></div>
+            <!-- Quiz -->
+            <section class="tech-card" data-section="tools" data-title="quiz test knowledge pc hardware">
+                <div class="card-header"><div class="card-header-icon" style="background:linear-gradient(135deg,#ec4899,#f59e0b)">🎯</div>PC Knowledge Quiz</div>
+                <div class="list-container">
+                    <div id="quiz-wrap">
+                        <div class="quiz-progress-wrap">
+                            <div class="quiz-progress-bar" id="quiz-bar" style="width:0%"></div>
+                        </div>
+                        <div class="quiz-counter" id="quiz-counter">QUESTION 1 / 10</div>
+                        <div class="quiz-question" id="quiz-question"></div>
+                        <div class="quiz-options" id="quiz-options"></div>
+                        <div class="quiz-feedback" id="quiz-feedback"></div>
+                        <button class="quiz-next-btn" id="quiz-next" onclick="nextQuestion()">Next →</button>
                     </div>
-                    <div class="quiz-counter" id="quiz-counter">Question 1 / 10</div>
-                    <div class="quiz-question" id="quiz-question"></div>
-                    <div class="quiz-options" id="quiz-options"></div>
-                    <div class="quiz-feedback" id="quiz-feedback"></div>
-                    <button class="quiz-next-btn" id="quiz-next" onclick="nextQuestion()">ဆက်မယ် →</button>
-                </div>
-                <div class="quiz-result" id="quiz-result">
-                    <div class="quiz-score-circle">
-                        <div class="quiz-score-num" id="quiz-score-num"></div>
+                    <div class="quiz-result" id="quiz-result">
+                        <div class="quiz-score-ring">
+                            <div class="quiz-score-num" id="quiz-score-num"></div>
+                        </div>
+                        <div class="quiz-result-msg" id="quiz-result-msg"></div>
+                        <div class="quiz-result-sub" id="quiz-result-sub"></div>
+                        <button class="quiz-restart-btn" onclick="restartQuiz()">🔄 Play Again</button>
                     </div>
-                    <div class="quiz-result-msg" id="quiz-result-msg"></div>
-                    <div class="quiz-result-sub" id="quiz-result-sub"></div>
-                    <button class="quiz-restart-btn" onclick="restartQuiz()">🔄 ထပ်ဖြေမယ်</button>
                 </div>
-            </div>
-        </section>
+            </section>
 
-    </div>
+        </div><!-- /container -->
 
-    <!-- ── Search No Results ── -->
-    <div id="search-no-results" style="display:none; text-align:center; padding:48px 20px; color:var(--text-dim);">
-        <div style="font-size:36px; margin-bottom:12px;">🔍</div>
-        <p style="font-size:15px; font-weight:600; color:var(--text-main); margin-bottom:6px;" id="no-res-text"></p>
-        <p style="font-size:13px; opacity:0.6;">Tab filter ပြောင်းကြည့်ပါ သို့မဟုတ် keyword အတိုပိုထည့်ပါ</p>
-    </div>
+            <!-- YouTube Resources Card -->
+            <section class="tech-card youtube-card" data-section="tools" data-title="youtube video resources guide tutorial">
+                <div class="card-header"><div class="card-header-icon" style="background:linear-gradient(135deg,#ff0000,#ff6b6b)">▶️</div>Video Resources</div>
+                <div class="list-container">
+                    <p style="font-size:13px;color:var(--text-3);margin-bottom:16px">PC Hardware နဲ့ ပတ်သတ်တဲ့ ကောင်းတဲ့ video guides 🎬</p>
+                    <div class="yt-grid">
+                        <div class="yt-item">
+                            <div class="yt-label">🖥️ How to Build a PC — Step by Step</div>
+                            <div class="yt-embed-wrap">
+                                <iframe src="https://www.youtube.com/embed/BL4DCEp7blY" title="How to Build a PC" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            </div>
+                        </div>
+                        <div class="yt-item">
+                            <div class="yt-label">💾 SSD vs HDD — Which Should You Buy?</div>
+                            <div class="yt-embed-wrap">
+                                <iframe src="https://youtu.be/fkhBG4Ny77g" title="SSD vs HDD" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            </div>
+                        </div>
+                        <div class="yt-item">
+                            <div class="yt-label">🔥 Best Budget PC Build 2025</div>
+                            <div class="yt-embed-wrap">
+                                <iframe src="https://www.youtube.com/embed/G-wuVkPCHHM" title="Budget PC Build 2025" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-    <!-- ── Feedback Section (full width below masonry) ── -->
-    <div style="max-width:1320px; margin:0 auto; padding:0 24px 10px; position:relative; z-index:1;">
-        <div class="feedback-card" data-section="tools">
-            <div class="card-header">💬 Feedback & Comments</div>
+        <!-- No results -->
+        <div id="search-no-results">
+            <div class="nr-icon">🔍</div>
+            <p id="no-res-text" style="font-size:15px;font-weight:700;color:var(--text-2);margin-bottom:6px"></p>
+            <p style="font-size:13px">Try a different keyword or change the tab filter</p>
+        </div>
 
-            <!-- Form -->
-            <div class="feedback-form" id="feedback-form">
-                <p style="font-size:13px; color:var(--text-dim); margin-bottom:4px;">Web ကို ဘယ်လို ထင်သလဲ? အကြံပြုချက် ရေးခဲ့ပါ 😊</p>
-                <div class="feedback-row">
+    </main>
+
+    <!-- Feedback Section -->
+    <div class="feedback-wrap">
+        <div class="feedback-card">
+            <div class="card-header"><div class="card-header-icon" style="background:linear-gradient(135deg,#00d4ff,#a855f7)">💬</div>Feedback & Comments</div>
+            <div class="feedback-form-inner" id="feedback-form">
+                <p style="font-size:13px;color:var(--text-3)">Web ကို ဘယ်လို ထင်သလဲ? အကြံပြုချက် ရေးခဲ့ပါ 😊</p>
+                <div class="fb-row">
                     <div>
-                        <label class="feedback-label">👤 နာမည်</label>
-                        <input type="text" id="fb-name" class="feedback-input" placeholder="Mg Kyaw..." maxlength="30">
+                        <label class="fb-label">👤 နာမည်</label>
+                        <input type="text" id="fb-name" class="fb-input" placeholder="Mg Kyaw..." maxlength="30">
                     </div>
                     <div>
-                        <label class="feedback-label">📂 Topic</label>
-                        <select id="fb-topic" class="feedback-select">
+                        <label class="fb-label">📂 Topic</label>
+                        <select id="fb-topic" class="fb-select">
                             <option value="General">🌐 General</option>
                             <option value="Hardware">🖥️ Hardware</option>
                             <option value="OS/Software">💿 OS/Software</option>
@@ -607,7 +539,7 @@
                     </div>
                 </div>
                 <div>
-                    <label class="feedback-label">⭐ Rating</label>
+                    <label class="fb-label">⭐ Rating</label>
                     <div class="star-rating">
                         <input type="radio" name="rating" id="s5" value="5"><label for="s5">★</label>
                         <input type="radio" name="rating" id="s4" value="4"><label for="s4">★</label>
@@ -617,31 +549,27 @@
                     </div>
                 </div>
                 <div>
-                    <label class="feedback-label">✏️ Comment</label>
-                    <textarea id="fb-text" class="feedback-textarea" placeholder="Web က ဘယ်လောက်ကောင်းသလဲ၊ ဘာတွေ ထပ်ထည့်ချင်သလဲ..." maxlength="300"></textarea>
+                    <label class="fb-label">✏️ Comment</label>
+                    <textarea id="fb-text" class="fb-textarea" placeholder="Web က ဘယ်လောက်ကောင်းသလဲ၊ ဘာတွေ ထပ်ထည့်ချင်သလဲ..." maxlength="300"></textarea>
                 </div>
-                <button class="feedback-submit" onclick="submitFeedback()">📨 Comment တင်မယ်</button>
+                <button class="fb-submit" onclick="submitFeedback()">📨 Comment တင်မယ်</button>
             </div>
-
-            <!-- Success Message -->
-            <div class="feedback-success" id="feedback-success">
-                <div class="success-icon">🎉</div>
+            <div class="fb-success" id="feedback-success">
+                <div class="s-icon">🎉</div>
                 <p><strong>ကျေးဇူးတင်ပါတယ်!</strong></p>
-                <p style="margin-top:6px;">Comment တင်ပြီးပါပြီ</p>
-                <button style="margin-top:14px; padding:8px 20px; background:rgba(96,200,255,0.1); border:1px solid rgba(96,200,255,0.3); color:var(--accent); border-radius:10px; font-family:Outfit,sans-serif; font-size:13px; cursor:pointer;" onclick="showFeedbackForm()">ထပ်ရေးမယ်</button>
+                <p>Comment တင်ပြီးပါပြီ</p>
+                <button class="fb-back-btn" onclick="showFeedbackForm()">ထပ်ရေးမယ်</button>
             </div>
-
-            <!-- Comments List -->
             <div class="comments-list" id="comments-list">
                 <div class="comments-empty" id="comments-empty">💬 Comment မရှိသေးဘူး — ပထမဆုံး ရေးပါ!</div>
             </div>
         </div>
     </div>
 
-    <!-- ── Back-to-top ── -->
-    <button id="back-to-top" onclick="scrollToTop()" title="အပေါ်ပြန်တက်ရန်">↑</button>
+    <!-- Back to top -->
+    <button id="back-to-top" onclick="scrollToTop()" title="Back to top">↑</button>
 
-    <!-- ── Footer ── -->
+    <!-- Footer -->
     <footer class="site-footer">
         <div class="footer-brand">⚡ PC Tech Library</div>
         <div class="footer-sub">Knowledge Base by Mg Kyaw · Kyaw Khant Thu</div>
@@ -651,14 +579,14 @@
             <span class="footer-tag">#RobloxDev</span>
             <span class="footer-tag">#WebDev</span>
         </div>
-        <div class="footer-copy">Made with <span>♥</span> · Liquid Glass Design</div>
+        <div class="footer-copy">Built with <span>LOVE</span> · Premium Electric Dark Update 2.0</div>
         <div class="footer-updated" id="footer-updated"></div>
     </footer>
 
-    <!-- ── Firebase SDK (CDN) ── -->
+    <!-- Firebase Analytics -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-
     <script src="script.js"></script>
 </body>
 </html>
